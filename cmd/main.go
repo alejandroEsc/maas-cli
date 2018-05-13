@@ -1,49 +1,47 @@
 package main
 
 import (
-	"github.com/alejandroEsc/maas-client-sample/pkg/util"
+	"encoding/json"
+
 	m "github.com/alejandroEsc/maas-client-sample/pkg/maas"
+	"github.com/alejandroEsc/maas-client-sample/pkg/util"
+	"github.com/juju/gomaasapi"
 	"github.com/juju/loggo"
 	"github.com/spf13/viper"
-	"github.com/juju/gomaasapi"
-	"encoding/json"
 )
 
 const (
-	apiKeyKey = "api_key"
-	maasUrlKey = "url"
+	apiKeyKey         = "api_key"
+	maasURLKey        = "url"
 	maasAPIVersionKey = "api_version"
 )
 
 var (
-	logger        loggo.Logger
+	logger loggo.Logger
 )
-
 
 // Init initializes the environment variables to be used by the app
 func Init() {
 	viper.AutomaticEnv()
 	viper.SetEnvPrefix("maas_client")
-	viper.BindEnv(maasUrlKey)
+	viper.BindEnv(maasURLKey)
 	viper.BindEnv(apiKeyKey)
 	viper.BindEnv(maasAPIVersionKey)
 }
 
-
 func main() {
 	Init()
 	apiKey := viper.GetString(apiKeyKey)
-	maasUrl := viper.GetString(maasUrlKey)
+	maasURL := viper.GetString(maasURLKey)
 	apiVersion := viper.GetString(maasAPIVersionKey)
 
-
 	logger = util.GetModuleLogger("cmd", loggo.INFO)
-	logger.Infof("%s %s %s",apiKey, maasUrl, apiVersion)
+	logger.Infof("%s %s %s", apiKey, maasURL, apiVersion)
 
 	logger.Infof("Starting Sample-MAAS Client...")
 
 	// Create API server endpoint.
-	authClient, err := gomaasapi.NewAuthenticatedClient(gomaasapi.AddAPIVersionToURL(maasUrl, apiVersion), apiKey)
+	authClient, err := gomaasapi.NewAuthenticatedClient(gomaasapi.AddAPIVersionToURL(maasURL, apiVersion), apiKey)
 	checkError(err)
 	maas := gomaasapi.NewMAAS(*authClient)
 
@@ -59,7 +57,7 @@ func main() {
 
 }
 
-func getMAASVersion(maasCLI *m.MAASClient) {
+func getMAASVersion(maasCLI *m.MAASclient) {
 	version, err := maasCLI.GetMAASVersion()
 	checkError(err)
 	jp, err := json.MarshalIndent(version, "", "\t")
@@ -67,12 +65,11 @@ func getMAASVersion(maasCLI *m.MAASClient) {
 	logger.Infof("\n%s", jp)
 }
 
-
 // ManipulateFiles exercises the /api/1.0/nodes/ API endpoint.  Most precisely,
 // it lists the existing nodes, creates a new node, updates it and then
 // deletes it.
-func listMachines(maasCLI *m.MAASClient) {
-	listObj, err:= maasCLI.GetMachines()
+func listMachines(maasCLI *m.MAASclient) {
+	listObj, err := maasCLI.GetMachines()
 	checkError(err)
 
 	machinesArray, err := listObj.GetArray()
@@ -98,8 +95,8 @@ func listMachines(maasCLI *m.MAASClient) {
 	}
 }
 
-func listNodes(maasCLI *m.MAASClient) {
-	listObj, err:= maasCLI.GetNodes()
+func listNodes(maasCLI *m.MAASclient) {
+	listObj, err := maasCLI.GetNodes()
 	checkError(err)
 
 	nodesArray, err := listObj.GetArray()
@@ -124,8 +121,8 @@ func listNodes(maasCLI *m.MAASClient) {
 
 }
 
-func getMachineAddresses(maasCLI *m.MAASClient){
-	listObj, err:= maasCLI.GetMachines()
+func getMachineAddresses(maasCLI *m.MAASclient) {
+	listObj, err := maasCLI.GetMachines()
 	checkError(err)
 
 	machinesArray, err := listObj.GetArray()
