@@ -65,9 +65,6 @@ func getMAASVersion(maasCLI *m.MAASclient) {
 	logger.Infof("\n%s", jp)
 }
 
-// ManipulateFiles exercises the /api/1.0/nodes/ API endpoint.  Most precisely,
-// it lists the existing nodes, creates a new node, updates it and then
-// deletes it.
 func listMachines(maasCLI *m.MAASclient) {
 	listObj, err := maasCLI.GetMachines()
 	checkError(err)
