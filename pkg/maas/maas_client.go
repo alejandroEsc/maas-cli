@@ -56,3 +56,4 @@ func (m *MAASclient) GetInterfaces(systemID string) (gomaasapi.JSONObject, error
 	interfaces := m.massAPIObj.GetSubObject("nodes").GetSubObject(systemID).GetSubObject("interfaces")
 	return interfaces.CallGet("", url.Values{})
 }
+
