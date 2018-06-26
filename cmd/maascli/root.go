@@ -3,19 +3,20 @@ package main
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/juju/loggo"
-	"github.com/alejandroEsc/maas-client-sample/pkg/util"
 	"github.com/alejandroEsc/maas-client-sample/pkg/cli"
+	"github.com/alejandroEsc/maas-client-sample/pkg/util"
+	"github.com/juju/loggo"
 
+	"encoding/json"
 	"fmt"
 	"os"
-	"github.com/spf13/viper"
+
 	"github.com/juju/gomaasapi"
-	"encoding/json"
+	"github.com/spf13/viper"
 )
 
 var (
-	logger = util.GetModuleLogger("cmd.maascli", loggo.INFO)
+	logger      = util.GetModuleLogger("cmd.maascli", loggo.INFO)
 	MAASOptions = &cli.MAASOptions{}
 )
 
@@ -28,8 +29,7 @@ var RootCmd = &cobra.Command{
 	},
 }
 
-
-func init(){
+func init() {
 	// init viper defaults
 	initEnvDefaults()
 
@@ -45,14 +45,11 @@ func init(){
 	addCommands()
 }
 
-
 func addCommands() {
 	RootCmd.AddCommand(MachineCmd())
 	RootCmd.AddCommand(ListMachinesCmd())
 	RootCmd.AddCommand(VersionCmd())
 }
-
-
 
 // Execute performs root command task.
 func Execute() {
@@ -67,6 +64,6 @@ func fmtPrintJson(o gomaasapi.JSONObject) error {
 	if err != nil {
 		return err
 	}
-	fmt.Printf("\n%s",jp)
+	fmt.Printf("\n%s", jp)
 	return nil
 }

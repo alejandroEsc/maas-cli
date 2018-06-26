@@ -1,23 +1,22 @@
 package main
 
-
 import (
-	"github.com/spf13/cobra"
 	m "github.com/alejandroEsc/maas-client-sample/pkg/maas"
+	"github.com/spf13/cobra"
+
+	"net/url"
 
 	"github.com/alejandroEsc/maas-client-sample/pkg/cli"
-	"github.com/spf13/viper"
 	"github.com/juju/gomaasapi"
-	"net/url"
+	"github.com/spf13/viper"
 )
-
 
 func MachineCmd() *cobra.Command {
 	mo := &cli.MachineOptions{}
 	machinesCmd := &cobra.Command{
-		Use: "machine",
+		Use:   "machine",
 		Short: "Run a few simple machine commands",
-		Long: "",
+		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
 			cmd.Usage()
 		},
@@ -31,10 +30,8 @@ func MachineCmd() *cobra.Command {
 	machinesCmd.AddCommand(MachineReleaseCmd())
 	machinesCmd.AddCommand(MachineDeployCmd())
 
-
 	return machinesCmd
 }
-
 
 func runMachineActionCmd(action m.MachineAction, o *cli.MachineOptions, args []string) error {
 	var err error
@@ -70,4 +67,3 @@ func runMachineActionCmd(action m.MachineAction, o *cli.MachineOptions, args []s
 
 	return nil
 }
-

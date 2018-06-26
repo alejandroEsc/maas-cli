@@ -1,51 +1,51 @@
 package maas
 
 import (
-	"github.com/juju/gomaasapi"
-	"net/url"
 	"fmt"
+	"net/url"
+
+	"github.com/juju/gomaasapi"
 )
 
 // Machine is a convenient internal representation of a machine
 type Machine struct {
-	Name string
-	SystemID string
-	Kernel string
-	OS string
+	Name       string
+	SystemID   string
+	Kernel     string
+	OS         string
 	PowerState string
-	Status string
+	Status     string
 }
 
 // MachineAction represents actions that can be taken against a machine
 type MachineAction string
 
-const(
+const (
 	CommissionMachine MachineAction = "commission"
-	ReleaseMachine MachineAction = "release"
-	DeployMachine MachineAction = "deploy"
+	ReleaseMachine    MachineAction = "release"
+	DeployMachine     MachineAction = "deploy"
 )
-
 
 // DefaultParams returns, depending on a particular action, a set of query parameters
 func DefaultParams(action MachineAction) url.Values {
 	switch action {
 	case CommissionMachine:
 		return url.Values{
-			"enable_ssh":{"1"},
-			"skip_networking":{"0"},
-			"skip_storage": {"0"},
+			"enable_ssh":      {"1"},
+			"skip_networking": {"0"},
+			"skip_storage":    {"0"},
 		}
 	case ReleaseMachine:
 		return url.Values{
-			"erase":{"1"},
-			"secure_erase":{"0"},
-			"quick_erase": {"1"},
+			"erase":        {"1"},
+			"secure_erase": {"0"},
+			"quick_erase":  {"1"},
 		}
 	case DeployMachine:
 		return url.Values{
-			"distro_series":{"ubuntu"},
-			"hwe_kernel":{"ga-16.04"},
-			"comment": {"deployed by maas cli"},
+			"distro_series": {"ubuntu"},
+			"hwe_kernel":    {"ga-16.04"},
+			"comment":       {"deployed by maas cli"},
 		}
 	default:
 		return url.Values{}
@@ -61,7 +61,7 @@ func (m *MAASclient) PerformMachineAction(action MachineAction, systemID string,
 		params = DefaultParams(action)
 	}
 
-	return machineSubObject.CallPost(fmt.Sprintf("%s",action), params)
+	return machineSubObject.CallPost(fmt.Sprintf("%s", action), params)
 }
 
 // GetStatus Returns the status of a machine given a systemID

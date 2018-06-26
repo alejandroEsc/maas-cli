@@ -1,22 +1,21 @@
 package main
 
-
 import (
-	"github.com/spf13/cobra"
 	m "github.com/alejandroEsc/maas-client-sample/pkg/maas"
+	"github.com/spf13/cobra"
+
+	"os"
 
 	"github.com/alejandroEsc/maas-client-sample/pkg/cli"
-	"os"
 	"github.com/spf13/viper"
 )
-
 
 func MachineCommissionCmd() *cobra.Command {
 	mo := &cli.MachineOptions{}
 	machineCommissionCmd := &cobra.Command{
-		Use: "machine",
+		Use:   "machine",
 		Short: "Run a few simple machine commands",
-		Long: "",
+		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
 
 			if err := runMachineActionCmd(m.CommissionMachine, mo, args); err != nil {
@@ -30,12 +29,7 @@ func MachineCommissionCmd() *cobra.Command {
 	fs.StringVar(&mo.APIKey, "api-key", viper.GetString(keyAPIKey), "maas apikey")
 	fs.StringVar(&mo.MAASURLKey, "maas-url", viper.GetString(keyMAASURL), "maas url")
 	fs.StringVar(&mo.MAASAPIVersionKey, "api-version", viper.GetString(keyMAASAPIVersion), "maas api version")
-	fs.StringVar(&mo.Params, "params","","paramaters to pass to an action")
+	fs.StringVar(&mo.Params, "params", "", "paramaters to pass to an action")
 
 	return machineCommissionCmd
 }
-
-
-
-
-

@@ -1,20 +1,22 @@
 package main
 
 import (
-	"github.com/spf13/cobra"
-	"github.com/juju/gomaasapi"
 	m "github.com/alejandroEsc/maas-client-sample/pkg/maas"
+	"github.com/juju/gomaasapi"
+	"github.com/spf13/cobra"
 
 	"os"
-	"github.com/spf13/viper"
+
 	"github.com/alejandroEsc/maas-client-sample/pkg/cli"
+	"github.com/spf13/viper"
 )
+
 func VersionCmd() *cobra.Command {
 	vo := &cli.VersionOptions{}
 	versionCmd := &cobra.Command{
-		Use: "version",
+		Use:   "version",
 		Short: "Get Version info",
-		Long: "",
+		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
 
 			if err := runVersionCmd(vo); err != nil {
@@ -30,11 +32,8 @@ func VersionCmd() *cobra.Command {
 	fs.StringVar(&vo.MAASURLKey, "maas-url", viper.GetString(keyMAASURL), "maas url")
 	fs.StringVar(&vo.MAASAPIVersionKey, "api-version", viper.GetString(keyMAASAPIVersion), "maas api version")
 
-
 	return versionCmd
 }
-
-
 
 func runVersionCmd(o *cli.VersionOptions) error {
 	var err error

@@ -22,7 +22,7 @@ function inf {
 }
 
 packages() {
-  echo "./cmd/ ./pkg/util/"
+  echo "./cmd/ ./cmd/client/ ./cmd/maascli/ ./pkg/util/ ./pkg/cli/ ./pkg/maas/"
 }
 
 valid_go_files() {

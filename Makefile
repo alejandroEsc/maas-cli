@@ -1,14 +1,17 @@
 GIT_SHA=$(shell git rev-parse --verify HEAD)
-GOBUILD=go build -o bin/maas-sample-client
+GOBUILD_CLI=go build -o ./bin/mass-cli
+GOBUILD_CLIENT=go build -o ./bin/mass-sample-client
 
 clean: ## clean build output
 	rm -rf bin/*
 
 compile: ## build and place in local bin directory
-	${GOBUILD} ./cmd
+	${GOBUILD_CLI} ./cmd/maascli
+	${GOBUILD_CLIENT} ./cmd/client
 
 compile-linux: ## build linux version
-	GOOS=linux GOARCH=amd64 ${GOBUILD} -o bin/linux-amd64 ./cmd
+	GOOS=linux GOARCH=amd64 ${GOBUILD_CLI} -o bin/linux-amd64 ./cmd/maascli
+	GOOS=linux GOARCH=amd64 ${GOBUILD_CLIENT} -o bin/linux-amd64 ./cmd/client
 
 go-lint-checks: ## run linting checks against golang code
 	./scripts/verify.sh

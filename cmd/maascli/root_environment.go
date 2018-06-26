@@ -1,27 +1,23 @@
 package main
 
 import (
-	"github.com/spf13/viper"
-	flag "github.com/spf13/pflag"
 	"github.com/alejandroEsc/maas-client-sample/pkg/cli"
+	flag "github.com/spf13/pflag"
+	"github.com/spf13/viper"
 )
 
 const (
-
-	envVarAPIKey = "MAAS_CLI_API_KEY"
-	envVarURL = "MAAS_CLI_URL"
+	envVarAPIKey     = "MAAS_CLI_API_KEY"
+	envVarURL        = "MAAS_CLI_URL"
 	envVarAPIVersion = "MAAS_CLI_API_VERSION"
 
 	keyAPIKey         = "api_key"
 	keyMAASURL        = "url"
 	keyMAASAPIVersion = "api_version"
 
-
-	keyMachineID = "machineID"
-	keyMachineAction ="action"
-
+	keyMachineID     = "machineID"
+	keyMachineAction = "action"
 )
-
 
 func initEnvDefaults() {
 	viper.SetDefault(keyAPIKey, "")

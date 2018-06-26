@@ -1,15 +1,15 @@
 package main
 
-
 import (
-	"github.com/spf13/cobra"
 	m "github.com/alejandroEsc/maas-client-sample/pkg/maas"
+	"github.com/spf13/cobra"
+
+	"fmt"
+	"os"
 
 	"github.com/alejandroEsc/maas-client-sample/pkg/cli"
-	"os"
 	"github.com/juju/gomaasapi"
 	"github.com/spf13/viper"
-	"fmt"
 )
 
 const (
@@ -19,9 +19,9 @@ const (
 func ListMachinesCmd() *cobra.Command {
 	mo := &cli.ListMachineOptions{}
 	listMachinesCmd := &cobra.Command{
-		Use: "list-machines ...",
+		Use:   "list-machines ...",
 		Short: "list machines in maas",
-		Long: "",
+		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
 
 			if err := runListMachineCmd(mo); err != nil {
@@ -103,14 +103,13 @@ func printShort(machinesArray []gomaasapi.JSONObject) {
 		status, err := machine.GetField("status_name")
 		logError(err)
 
-
 		m := m.Machine{
-			Name: machineName,
-			SystemID: machineSystemID,
-			Kernel: hweKernel,
-			OS: os,
+			Name:       machineName,
+			SystemID:   machineSystemID,
+			Kernel:     hweKernel,
+			OS:         os,
 			PowerState: power,
-			Status: status,
+			Status:     status,
 		}
 
 		switch power {
@@ -140,7 +139,6 @@ func printShort(machinesArray []gomaasapi.JSONObject) {
 		printMachines(mUnknown)
 	}
 
-
 }
 
 func printMachines(ms []m.Machine) {
@@ -153,7 +151,7 @@ func printMachines(ms []m.Machine) {
 			mn.OS,
 			mn.Kernel,
 			mn.PowerState,
-			mn.Status,)
+			mn.Status)
 	}
 }
 
@@ -164,13 +162,13 @@ func printLong(machinesArray []gomaasapi.JSONObject) error {
 		if err != nil {
 			return err
 		}
-		fmt.Printf("\n --- machine: %d ---\n",i)
-		fmt.Printf("%s",j)
+		fmt.Printf("\n --- machine: %d ---\n", i)
+		fmt.Printf("%s", j)
 	}
 	return nil
 }
 
-func logError(err error){
+func logError(err error) {
 	if err != nil {
 		logger.Errorf(err.Error())
 	}

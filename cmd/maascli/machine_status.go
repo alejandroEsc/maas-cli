@@ -1,24 +1,23 @@
 package main
 
-
 import (
-	"github.com/spf13/cobra"
 	m "github.com/alejandroEsc/maas-client-sample/pkg/maas"
+	"github.com/spf13/cobra"
+
+	"fmt"
+	"os"
 
 	"github.com/alejandroEsc/maas-client-sample/pkg/cli"
-	"os"
-	"fmt"
 	"github.com/juju/gomaasapi"
 	"github.com/spf13/viper"
 )
 
-
 func MachineStatusCmd() *cobra.Command {
 	mo := &cli.MachineOptions{}
 	machineStatusCmd := &cobra.Command{
-		Use: "status",
+		Use:   "status",
 		Short: "get machine status",
-		Long: "Returns the MAAS concept of machine status",
+		Long:  "Returns the MAAS concept of machine status",
 		Run: func(cmd *cobra.Command, args []string) {
 
 			if len(args) == 0 {
@@ -40,7 +39,6 @@ func MachineStatusCmd() *cobra.Command {
 
 	return machineStatusCmd
 }
-
 
 func runMachineStatusCmd(o *cli.MachineOptions, args []string) error {
 	var err error
@@ -66,5 +64,3 @@ func runMachineStatusCmd(o *cli.MachineOptions, args []string) error {
 
 	return nil
 }
-
-

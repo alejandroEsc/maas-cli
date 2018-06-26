@@ -1,10 +1,9 @@
 package cli
 
-
 // MAASOptions contains the options to allow communication with MAAS
 type MAASOptions struct {
-	APIKey string
-	MAASURLKey string
+	APIKey            string
+	MAASURLKey        string
 	MAASAPIVersionKey string
 }
 
