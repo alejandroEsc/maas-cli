@@ -11,9 +11,9 @@ import (
 	"github.com/spf13/viper"
 )
 
-func MachineCmd() *cobra.Command {
+func machineCmd() *cobra.Command {
 	mo := &cli.MachineOptions{}
-	machinesCmd := &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "machine",
 		Short: "Run a few simple machine commands",
 		Long:  "",
@@ -21,21 +21,22 @@ func MachineCmd() *cobra.Command {
 			cmd.Usage()
 		},
 	}
-	fs := machinesCmd.Flags()
+	fs := cmd.Flags()
 	fs.StringVar(&mo.APIKey, "api-key", viper.GetString(keyAPIKey), "maas apikey")
 	fs.StringVar(&mo.MAASURLKey, "maas-url", viper.GetString(keyMAASURL), "maas url")
 	fs.StringVar(&mo.MAASAPIVersionKey, "api-version", viper.GetString(keyMAASAPIVersion), "maas api version")
 
-	machinesCmd.AddCommand(MachineStatusCmd())
-	machinesCmd.AddCommand(MachineReleaseCmd())
-	machinesCmd.AddCommand(MachineDeployCmd())
+	cmd.AddCommand(machineStatusCmd())
+	cmd.AddCommand(machineReleaseCmd())
+	cmd.AddCommand(machineDeployCmd())
+	cmd.AddCommand(machineCommissionCmd())
 
-	return machinesCmd
+	return cmd
 }
 
 func runMachineActionCmd(action m.MachineAction, o *cli.MachineOptions, args []string) error {
 	var err error
-	var params url.Values = nil
+	var params url.Values
 
 	if o.Params != "" {
 		params, err = url.ParseQuery(o.Params)
@@ -59,7 +60,7 @@ func runMachineActionCmd(action m.MachineAction, o *cli.MachineOptions, args []s
 			return err
 		}
 
-		err = fmtPrintJson(result)
+		err = fmtPrintJSON(result)
 		if err != nil {
 			return err
 		}

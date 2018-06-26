@@ -10,9 +10,9 @@ import (
 	"github.com/spf13/viper"
 )
 
-func MachineReleaseCmd() *cobra.Command {
+func machineReleaseCmd() *cobra.Command {
 	mo := &cli.MachineOptions{}
-	machineReleaseCmd := &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "machine",
 		Short: "Run a few simple machine commands",
 		Long:  "",
@@ -25,11 +25,11 @@ func MachineReleaseCmd() *cobra.Command {
 
 		},
 	}
-	fs := machineReleaseCmd.Flags()
+	fs := cmd.Flags()
 	fs.StringVar(&mo.APIKey, "api-key", viper.GetString(keyAPIKey), "maas apikey")
 	fs.StringVar(&mo.MAASURLKey, "maas-url", viper.GetString(keyMAASURL), "maas url")
 	fs.StringVar(&mo.MAASAPIVersionKey, "api-version", viper.GetString(keyMAASAPIVersion), "maas api version")
 	fs.StringVar(&mo.Params, "params", "", "paramaters to pass to an action")
 
-	return machineReleaseCmd
+	return cmd
 }

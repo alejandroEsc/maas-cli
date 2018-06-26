@@ -16,9 +16,9 @@ const (
 	printFmt = "|\t %d \t|\t %s \t|\t %s \t|\t %s:%s \t|\t %s \t|\t %s \t| \n"
 )
 
-func ListMachinesCmd() *cobra.Command {
+func listMachinesCmd() *cobra.Command {
 	mo := &cli.ListMachineOptions{}
-	listMachinesCmd := &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "list-machines ...",
 		Short: "list machines in maas",
 		Long:  "",
@@ -32,16 +32,16 @@ func ListMachinesCmd() *cobra.Command {
 		},
 	}
 
-	fs := listMachinesCmd.Flags()
+	fs := cmd.Flags()
 
-	//bindCommonMAASFlags(&mo.MAASOptions, fs)
+	//bindCommonMAASFlags(&mo.options, fs)
 	fs.StringVar(&mo.APIKey, "api-key", viper.GetString(keyAPIKey), "maas apikey")
 	fs.StringVar(&mo.MAASURLKey, "maas-url", viper.GetString(keyMAASURL), "maas url")
 	fs.StringVar(&mo.MAASAPIVersionKey, "api-version", viper.GetString(keyMAASAPIVersion), "maas api version")
 
 	fs.BoolVar(&mo.Detailed, "detailed", false, "print all details")
 
-	return listMachinesCmd
+	return cmd
 }
 
 func runListMachineCmd(o *cli.ListMachineOptions) error {
@@ -70,9 +70,10 @@ func runListMachineCmd(o *cli.ListMachineOptions) error {
 
 	if o.Detailed {
 		return printLong(machinesArray)
-	} else {
-		printShort(machinesArray)
 	}
+
+	printShort(machinesArray)
+
 	return nil
 }
 

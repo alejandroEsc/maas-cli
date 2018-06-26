@@ -7,7 +7,7 @@ type MAASOptions struct {
 	MAASAPIVersionKey string
 }
 
-// MachinesOptions options for the machines command
+// MachineOptions options for the machines command
 type MachineOptions struct {
 	MAASOptions
 	Params string

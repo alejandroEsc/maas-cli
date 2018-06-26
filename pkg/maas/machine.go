@@ -21,9 +21,12 @@ type Machine struct {
 type MachineAction string
 
 const (
+	// CommissionMachine is the action of commissioning
 	CommissionMachine MachineAction = "commission"
-	ReleaseMachine    MachineAction = "release"
-	DeployMachine     MachineAction = "deploy"
+	// ReleaseMachine is the action of releasing
+	ReleaseMachine MachineAction = "release"
+	// DeployMachine is the action of deploying
+	DeployMachine MachineAction = "deploy"
 )
 
 // DefaultParams returns, depending on a particular action, a set of query parameters

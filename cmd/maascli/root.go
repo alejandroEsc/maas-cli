@@ -16,8 +16,8 @@ import (
 )
 
 var (
-	logger      = util.GetModuleLogger("cmd.maascli", loggo.INFO)
-	MAASOptions = &cli.MAASOptions{}
+	logger  = util.GetModuleLogger("cmd.maascli", loggo.INFO)
+	options = &cli.MAASOptions{}
 )
 
 // RootCmd represents the base command when called without any subcommands
@@ -34,9 +34,9 @@ func init() {
 	initEnvDefaults()
 
 	// root flags
-	RootCmd.PersistentFlags().StringVar(&MAASOptions.APIKey, "api-key", viper.GetString(keyAPIKey), "maas apikey")
-	RootCmd.PersistentFlags().StringVar(&MAASOptions.MAASURLKey, "maas-url", viper.GetString(keyMAASURL), "maas url")
-	RootCmd.PersistentFlags().StringVar(&MAASOptions.MAASAPIVersionKey, "api-version", viper.GetString(keyMAASAPIVersion), "maas api version")
+	RootCmd.PersistentFlags().StringVar(&options.APIKey, "api-key", viper.GetString(keyAPIKey), "maas apikey")
+	RootCmd.PersistentFlags().StringVar(&options.MAASURLKey, "maas-url", viper.GetString(keyMAASURL), "maas url")
+	RootCmd.PersistentFlags().StringVar(&options.MAASAPIVersionKey, "api-version", viper.GetString(keyMAASAPIVersion), "maas api version")
 
 	// bind environment vars
 	bindEnvVars()
@@ -46,9 +46,9 @@ func init() {
 }
 
 func addCommands() {
-	RootCmd.AddCommand(MachineCmd())
-	RootCmd.AddCommand(ListMachinesCmd())
-	RootCmd.AddCommand(VersionCmd())
+	RootCmd.AddCommand(machineCmd())
+	RootCmd.AddCommand(listMachinesCmd())
+	RootCmd.AddCommand(versionCmd())
 }
 
 // Execute performs root command task.
@@ -59,7 +59,7 @@ func Execute() {
 	}
 }
 
-func fmtPrintJson(o gomaasapi.JSONObject) error {
+func fmtPrintJSON(o gomaasapi.JSONObject) error {
 	jp, err := json.MarshalIndent(o, "", "\t")
 	if err != nil {
 		return err

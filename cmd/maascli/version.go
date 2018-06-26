@@ -11,9 +11,9 @@ import (
 	"github.com/spf13/viper"
 )
 
-func VersionCmd() *cobra.Command {
+func versionCmd() *cobra.Command {
 	vo := &cli.VersionOptions{}
-	versionCmd := &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "version",
 		Short: "Get Version info",
 		Long:  "",
@@ -27,12 +27,12 @@ func VersionCmd() *cobra.Command {
 		},
 	}
 
-	fs := versionCmd.Flags()
+	fs := cmd.Flags()
 	fs.StringVar(&vo.APIKey, "api-key", viper.GetString(keyAPIKey), "maas apikey")
 	fs.StringVar(&vo.MAASURLKey, "maas-url", viper.GetString(keyMAASURL), "maas url")
 	fs.StringVar(&vo.MAASAPIVersionKey, "api-version", viper.GetString(keyMAASAPIVersion), "maas api version")
 
-	return versionCmd
+	return cmd
 }
 
 func runVersionCmd(o *cli.VersionOptions) error {
@@ -51,7 +51,7 @@ func runVersionCmd(o *cli.VersionOptions) error {
 	if err != nil {
 		return err
 	}
-	fmtPrintJson(version)
+	fmtPrintJSON(version)
 
 	return nil
 }

@@ -12,9 +12,9 @@ import (
 	"github.com/spf13/viper"
 )
 
-func MachineStatusCmd() *cobra.Command {
+func machineStatusCmd() *cobra.Command {
 	mo := &cli.MachineOptions{}
-	machineStatusCmd := &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "status",
 		Short: "get machine status",
 		Long:  "Returns the MAAS concept of machine status",
@@ -31,13 +31,13 @@ func MachineStatusCmd() *cobra.Command {
 
 		},
 	}
-	fs := machineStatusCmd.Flags()
+	fs := cmd.Flags()
 
 	fs.StringVar(&mo.APIKey, "api-key", viper.GetString(keyAPIKey), "maas apikey")
 	fs.StringVar(&mo.MAASURLKey, "maas-url", viper.GetString(keyMAASURL), "maas url")
 	fs.StringVar(&mo.MAASAPIVersionKey, "api-version", viper.GetString(keyMAASAPIVersion), "maas api version")
 
-	return machineStatusCmd
+	return cmd
 }
 
 func runMachineStatusCmd(o *cli.MachineOptions, args []string) error {
