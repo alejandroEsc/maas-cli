@@ -1,5 +1,5 @@
 GIT_SHA=$(shell git rev-parse --verify HEAD)
-GOBUILD_CLI=go build -o ./bin/mass-cli
+GOBUILD_CLI=go build -o ./bin/maas-cli
 GOBUILD_CLIENT=go build -o ./bin/mass-sample-client
 
 clean: ## clean build output
