@@ -1,18 +1,36 @@
-#  MAAS-Client-Sample
+# MAAS-CLI
 
 Project consists of two parts:
+- MAAS CLI 
 - MAAS Client
-- MAAS CLI tool
 
 One goal of this project is to get usable maas-client library code example so one
-can learn to use the api tools provieded by the [https://github.com/juju/gomaasapi](https://github.com/juju/gomaasapi) project.
+can learn to use the api tools provided by the [https://github.com/juju/gomaasapi](https://github.com/juju/gomaasapi) project.
 
-Note: That make file cannot be trusted as code is still work in progress.
+## Building
 
-## Building tools
+First we need to build the vendor directory
 
+```
+$ dep ensure
+```
 
-## MAAS CLI
+To build the projects listed above you run 
+
+```
+$ make compile
+```
+
+which should build two binaries:
+
+```
+./bin/mass-cli
+./bin/maas-client
+```
+
+The client tool being the CLI and the other an example of creating a maas client.
+
+## maas-cli
 The CLI is a work in progess, you can access the help menu by typing
 ```
 $ ./bin/maas-cli help
@@ -46,5 +64,7 @@ $ ./bin/maas-cli machine status fpfnhk t67tnf
 ```
 
 ## MAAS Client
+Sample client code that creates a client that consumes the maas api. 
+
 
 ## Developing

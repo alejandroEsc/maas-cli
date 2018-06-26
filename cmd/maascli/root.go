@@ -3,8 +3,8 @@ package main
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/alejandroEsc/maas-client-sample/pkg/cli"
-	"github.com/alejandroEsc/maas-client-sample/pkg/util"
+	"github.com/alejandroEsc/maas-cli/pkg/cli"
+	"github.com/alejandroEsc/maas-cli/pkg/util"
 	"github.com/juju/loggo"
 
 	"encoding/json"
@@ -22,7 +22,7 @@ var (
 
 // RootCmd represents the base command when called without any subcommands
 var RootCmd = &cobra.Command{
-	Use:   "maascli",
+	Use:   "maas-cli",
 	Short: "MAAS CLI tool",
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
@@ -47,7 +47,7 @@ func init() {
 
 func addCommands() {
 	RootCmd.AddCommand(machineCmd())
-	RootCmd.AddCommand(listMachinesCmd())
+	RootCmd.AddCommand(listCmd())
 	RootCmd.AddCommand(versionCmd())
 }
 
@@ -66,4 +66,10 @@ func fmtPrintJSON(o gomaasapi.JSONObject) error {
 	}
 	fmt.Printf("\n%s", jp)
 	return nil
+}
+
+func logError(err error) {
+	if err != nil {
+		logger.Errorf(err.Error())
+	}
 }

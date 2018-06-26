@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/alejandroEsc/maas-client-sample/pkg/cli"
-	flag "github.com/spf13/pflag"
+	"github.com/alejandroEsc/maas-cli/pkg/cli"
 	"github.com/spf13/viper"
+	flag "github.com/spf13/pflag"
 )
 
 const (
@@ -14,9 +14,6 @@ const (
 	keyAPIKey         = "api_key"
 	keyMAASURL        = "url"
 	keyMAASAPIVersion = "api_version"
-
-	keyMachineID     = "machineID"
-	keyMachineAction = "action"
 )
 
 func initEnvDefaults() {

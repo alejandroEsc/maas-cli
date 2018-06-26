@@ -3,8 +3,8 @@ package client
 import (
 	"encoding/json"
 
-	m "github.com/alejandroEsc/maas-client-sample/pkg/maas"
-	"github.com/alejandroEsc/maas-client-sample/pkg/util"
+	m "github.com/alejandroEsc/maas-cli/pkg/maas"
+	"github.com/alejandroEsc/maas-cli/pkg/util"
 	"github.com/juju/gomaasapi"
 	"github.com/juju/loggo"
 	"github.com/spf13/viper"
@@ -45,27 +45,27 @@ func main() {
 	checkError(err)
 	maas := gomaasapi.NewMAAS(*authClient)
 
-	maasCLI := m.NewMaasClient(maas)
+	maasClient := m.NewMaas(maas)
 
-	getMAASVersion(maasCLI)
+	getMAASVersion(maasClient)
 
-	listMachines(maasCLI)
+	listMachines(maasClient)
 
-	listNodes(maasCLI)
+	listNodes(maasClient)
 
-	getMachineAddresses(maasCLI)
+	getMachineAddresses(maasClient)
 
 }
 
-func getMAASVersion(maasCLI *m.MAASclient) {
-	version, err := maasCLI.GetMAASVersion()
+func getMAASVersion(maasClient *m.Maas) {
+	version, err := maasClient.GetMAASVersion()
 	checkError(err)
 	jp, err := json.MarshalIndent(version, "", "\t")
 	checkError(err)
 	logger.Infof("\n%s", jp)
 }
 
-func listMachines(maasCLI *m.MAASclient) {
+func listMachines(maasCLI *m.Maas) {
 	listObj, err := maasCLI.GetMachines()
 	checkError(err)
 
@@ -92,7 +92,7 @@ func listMachines(maasCLI *m.MAASclient) {
 	}
 }
 
-func listNodes(maasCLI *m.MAASclient) {
+func listNodes(maasCLI *m.Maas) {
 	listObj, err := maasCLI.GetNodes()
 	checkError(err)
 
@@ -118,7 +118,7 @@ func listNodes(maasCLI *m.MAASclient) {
 
 }
 
-func getMachineAddresses(maasCLI *m.MAASclient) {
+func getMachineAddresses(maasCLI *m.Maas) {
 	listObj, err := maasCLI.GetMachines()
 	checkError(err)
 

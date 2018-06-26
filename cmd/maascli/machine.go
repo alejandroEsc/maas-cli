@@ -1,14 +1,13 @@
 package main
 
 import (
-	m "github.com/alejandroEsc/maas-client-sample/pkg/maas"
+	m "github.com/alejandroEsc/maas-cli/pkg/maas"
 	"github.com/spf13/cobra"
 
 	"net/url"
 
-	"github.com/alejandroEsc/maas-client-sample/pkg/cli"
+	"github.com/alejandroEsc/maas-cli/pkg/cli"
 	"github.com/juju/gomaasapi"
-	"github.com/spf13/viper"
 )
 
 func machineCmd() *cobra.Command {
@@ -22,9 +21,8 @@ func machineCmd() *cobra.Command {
 		},
 	}
 	fs := cmd.Flags()
-	fs.StringVar(&mo.APIKey, "api-key", viper.GetString(keyAPIKey), "maas apikey")
-	fs.StringVar(&mo.MAASURLKey, "maas-url", viper.GetString(keyMAASURL), "maas url")
-	fs.StringVar(&mo.MAASAPIVersionKey, "api-version", viper.GetString(keyMAASAPIVersion), "maas api version")
+	bindCommonMAASFlags(&mo.MAASOptions, fs)
+
 
 	cmd.AddCommand(machineStatusCmd())
 	cmd.AddCommand(machineReleaseCmd())
@@ -52,7 +50,7 @@ func runMachineActionCmd(action m.MachineAction, o *cli.MachineOptions, args []s
 	}
 
 	maas := gomaasapi.NewMAAS(*authClient)
-	maasCLI := m.NewMaasClient(maas)
+	maasCLI := m.NewMaas(maas)
 
 	for _, id := range args {
 		result, err := maasCLI.PerformMachineAction(action, id, params)

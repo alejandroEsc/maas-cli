@@ -48,7 +48,7 @@ func DefaultParams(action MachineAction) url.Values {
 		return url.Values{
 			"distro_series": {"ubuntu"},
 			"hwe_kernel":    {"ga-16.04"},
-			"comment":       {"deployed by maas cli"},
+			"comment":       {"deployed by Maas cli"},
 		}
 	default:
 		return url.Values{}
@@ -57,7 +57,7 @@ func DefaultParams(action MachineAction) url.Values {
 }
 
 // PerformMachineAction performs a commission
-func (m *MAASclient) PerformMachineAction(action MachineAction, systemID string, params url.Values) (gomaasapi.JSONObject, error) {
+func (m *Maas) PerformMachineAction(action MachineAction, systemID string, params url.Values) (gomaasapi.JSONObject, error) {
 	logger.Infof("%s Machine %s...", action, systemID)
 	machineSubObject := m.massAPIObj.GetSubObject("machines").GetSubObject(systemID)
 	if params == nil {
@@ -68,7 +68,7 @@ func (m *MAASclient) PerformMachineAction(action MachineAction, systemID string,
 }
 
 // GetStatus Returns the status of a machine given a systemID
-func (m *MAASclient) GetStatus(systemID string) (string, error) {
+func (m *Maas) GetStatus(systemID string) (string, error) {
 	machineSubObject := m.massAPIObj.GetSubObject("machines").GetSubObject(systemID)
 
 	obj, err := machineSubObject.CallGet("", url.Values{})

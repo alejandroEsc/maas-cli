@@ -1,15 +1,14 @@
 package main
 
 import (
-	m "github.com/alejandroEsc/maas-client-sample/pkg/maas"
+	m "github.com/alejandroEsc/maas-cli/pkg/maas"
 	"github.com/spf13/cobra"
 
 	"fmt"
 	"os"
 
-	"github.com/alejandroEsc/maas-client-sample/pkg/cli"
+	"github.com/alejandroEsc/maas-cli/pkg/cli"
 	"github.com/juju/gomaasapi"
-	"github.com/spf13/viper"
 )
 
 func machineStatusCmd() *cobra.Command {
@@ -21,21 +20,18 @@ func machineStatusCmd() *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 
 			if len(args) == 0 {
-				logger.Criticalf("please include machine id")
+				fmt.Printf("Please include machine id\n")
 			}
 
 			if err := runMachineStatusCmd(mo, args); err != nil {
-				logger.Criticalf(err.Error())
+				fmt.Println(err.Error())
 				os.Exit(1)
 			}
 
 		},
 	}
 	fs := cmd.Flags()
-
-	fs.StringVar(&mo.APIKey, "api-key", viper.GetString(keyAPIKey), "maas apikey")
-	fs.StringVar(&mo.MAASURLKey, "maas-url", viper.GetString(keyMAASURL), "maas url")
-	fs.StringVar(&mo.MAASAPIVersionKey, "api-version", viper.GetString(keyMAASAPIVersion), "maas api version")
+	bindCommonMAASFlags(&mo.MAASOptions, fs)
 
 	return cmd
 }
@@ -50,7 +46,7 @@ func runMachineStatusCmd(o *cli.MachineOptions, args []string) error {
 	}
 
 	maas := gomaasapi.NewMAAS(*authClient)
-	maasCLI := m.NewMaasClient(maas)
+	maasCLI := m.NewMaas(maas)
 
 	for _, id := range args {
 		result, err := maasCLI.GetStatus(id)

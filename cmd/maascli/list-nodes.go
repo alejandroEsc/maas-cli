@@ -12,18 +12,18 @@ import (
 )
 
 const (
-	printMachineFmt = "|\t %d \t|\t %s \t|\t %s \t|\t %s:%s \t|\t %s \t|\t %s \t| \n"
+	printNodeFmt = "|\t %d \t|\t %s \t|\t %s \t|\t %s \t|\t %s-%s \t|"
 )
 
-func listMachinesCmd() *cobra.Command {
-	mo := &cli.ListMachineOptions{}
+func listNodesCmd() *cobra.Command {
+	no := &cli.ListNodeOptions{}
 	cmd := &cobra.Command{
-		Use:   "list machines ...",
-		Short: "list machines resources in a MAAS server",
+		Use:   "list nodes ...",
+		Short: "list node resources in a MAAS server.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
 
-			if err := runListMachineCmd(mo); err != nil {
+			if err := runListNodeCmd(no); err != nil {
 				fmt.Println(err.Error())
 				os.Exit(1)
 			}
@@ -32,14 +32,15 @@ func listMachinesCmd() *cobra.Command {
 	}
 
 	fs := cmd.Flags()
-	bindCommonMAASFlags(&mo.MAASOptions, fs)
 
-	fs.BoolVar(&mo.Detailed, "detailed", false, "print all details")
+	bindCommonMAASFlags(&no.MAASOptions, fs)
+
+	fs.BoolVar(&no.Detailed, "detailed", false, "print all details")
 
 	return cmd
 }
 
-func runListMachineCmd(o *cli.ListMachineOptions) error {
+func runListNodeCmd(o *cli.ListNodeOptions) error {
 	// Create API server endpoint.
 	authClient, err := gomaasapi.NewAuthenticatedClient(gomaasapi.AddAPIVersionToURL(o.MAASURLKey, o.MAASAPIVersionKey), o.APIKey)
 	if err != nil {
@@ -64,15 +65,15 @@ func runListMachineCmd(o *cli.ListMachineOptions) error {
 	}
 
 	if o.Detailed {
-		return printMachinesDetailed(machinesArray)
+		return printNodesDetailed(machinesArray)
 	}
 
-	printMachinesSummary(machinesArray)
+	printNodesSummary(machinesArray)
 
 	return nil
 }
 
-func printMachinesSummary(machinesArray []gomaasapi.JSONObject) {
+func printNodesSummary(machinesArray []gomaasapi.JSONObject) {
 	mON := make([]m.Machine, 0)
 	mOFF := make([]m.Machine, 0)
 	mUnknown := make([]m.Machine, 0)
@@ -137,10 +138,10 @@ func printMachinesSummary(machinesArray []gomaasapi.JSONObject) {
 
 }
 
-func printMachines(ms []m.Machine) {
+func printNodes(ms []m.Machine) {
 	for i, mn := range ms {
 		fmt.Printf(
-			printMachineFmt,
+			printNodeFmt,
 			i,
 			mn.SystemID,
 			mn.Name,
@@ -151,7 +152,7 @@ func printMachines(ms []m.Machine) {
 	}
 }
 
-func printMachinesDetailed(machinesArray []gomaasapi.JSONObject) error {
+func printNodesDetailed(machinesArray []gomaasapi.JSONObject) error {
 	for i, machineObj := range machinesArray {
 		machine, err := machineObj.GetMAASObject()
 		j, err := machine.MarshalJSON()

@@ -1,13 +1,13 @@
 package main
 
 import (
-	m "github.com/alejandroEsc/maas-client-sample/pkg/maas"
+	m "github.com/alejandroEsc/maas-cli/pkg/maas"
 	"github.com/juju/gomaasapi"
 	"github.com/spf13/cobra"
 
 	"os"
 
-	"github.com/alejandroEsc/maas-client-sample/pkg/cli"
+	"github.com/alejandroEsc/maas-cli/pkg/cli"
 	"github.com/spf13/viper"
 )
 
@@ -45,7 +45,7 @@ func runVersionCmd(o *cli.VersionOptions) error {
 	}
 	maas := gomaasapi.NewMAAS(*authClient)
 
-	maasCLI := m.NewMaasClient(maas)
+	maasCLI := m.NewMaas(maas)
 
 	version, err := maasCLI.GetMAASVersion()
 	if err != nil {

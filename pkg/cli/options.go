@@ -13,8 +13,20 @@ type MachineOptions struct {
 	Params string
 }
 
+// ListOptions options listing machines
+type ListOptions struct {
+	MAASOptions
+	Detailed bool
+}
+
 // ListMachineOptions options listing machines
 type ListMachineOptions struct {
+	MAASOptions
+	Detailed bool
+}
+
+// ListNodeOptions options listing machines
+type ListNodeOptions struct {
 	MAASOptions
 	Detailed bool
 }

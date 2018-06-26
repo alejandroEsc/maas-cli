@@ -1,34 +1,33 @@
 package main
 
 import (
-	m "github.com/alejandroEsc/maas-client-sample/pkg/maas"
+	m "github.com/alejandroEsc/maas-cli/pkg/maas"
 	"github.com/spf13/cobra"
 
 	"os"
 
-	"github.com/alejandroEsc/maas-client-sample/pkg/cli"
-	"github.com/spf13/viper"
+	"github.com/alejandroEsc/maas-cli/pkg/cli"
+	"fmt"
 )
 
 func machineDeployCmd() *cobra.Command {
 	mo := &cli.MachineOptions{}
 	cmd := &cobra.Command{
-		Use:   "machine",
-		Short: "Run a few simple machine commands",
+		Use:   "deploy [machineID]",
+		Short: "Deploy action against one ore multiple machines.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
 
 			if err := runMachineActionCmd(m.DeployMachine, mo, args); err != nil {
-				logger.Criticalf(err.Error())
+				fmt.Println(err.Error())
 				os.Exit(1)
 			}
 
 		},
 	}
 	fs := cmd.Flags()
-	fs.StringVar(&mo.APIKey, "api-key", viper.GetString(keyAPIKey), "maas apikey")
-	fs.StringVar(&mo.MAASURLKey, "maas-url", viper.GetString(keyMAASURL), "maas url")
-	fs.StringVar(&mo.MAASAPIVersionKey, "api-version", viper.GetString(keyMAASAPIVersion), "maas api version")
+	bindCommonMAASFlags(&mo.MAASOptions, fs)
+
 	fs.StringVar(&mo.Params, "params", "", "paramaters to pass to an action")
 
 	return cmd

@@ -27,10 +27,6 @@
 
 [[constraint]]
   branch = "master"
-  name = "github.com/alejandroEsc/k8s-controller-example"
-
-[[constraint]]
-  branch = "master"
   name = "github.com/juju/gomaasapi"
 
 [[constraint]]
@@ -40,6 +36,10 @@
 [[constraint]]
   name = "github.com/spf13/viper"
   version = "1.0.2"
+
+[[constraint]]
+  name = "github.com/spf13/cobra"
+  version = "0.0.3"
 
 [prune]
   go-tests = true
