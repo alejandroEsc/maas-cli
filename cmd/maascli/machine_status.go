@@ -61,7 +61,7 @@ func runMachineStatusCmd(o *cli.MachineOptions, args []string) error {
 			continue
 		}
 
-		fmt.Printf("%s:\n \t%s\n", id, result)
+		fmt.Println(result)
 	}
 
 	return nil

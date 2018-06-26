@@ -89,5 +89,5 @@ func (m *MAASclient) GetStatus(systemID string) (string, error) {
 		logger.Errorf(err.Error())
 	}
 
-	return fmt.Sprintf("%s \t|\t %s",power, status), nil
+	return fmt.Sprintf("|\t %s \t|\t %s \t|\t %s \t|", systemID, power, status), nil
 }
