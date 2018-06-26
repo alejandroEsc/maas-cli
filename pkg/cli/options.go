@@ -8,8 +8,6 @@ type MAASOptions struct {
 	MAASAPIVersionKey string
 }
 
-
-
 // MachinesOptions options for the machines command
 type MachineOptions struct {
 	MAASOptions
@@ -19,5 +17,11 @@ type MachineOptions struct {
 
 // ListMachineOptions options listing machines
 type ListMachineOptions struct {
+	MAASOptions
+	Detailed bool
+}
+
+// VersionOptions version info
+type VersionOptions struct {
 	MAASOptions
 }

@@ -17,7 +17,7 @@ import (
 func MachineCmd() *cobra.Command {
 	mo := &cli.MachineOptions{}
 	machinesCmd := &cobra.Command{
-		Use: "machine ...",
+		Use: "machine",
 		Short: "Run a few simple machine commands",
 		Long: "",
 		Run: func(cmd *cobra.Command, args []string) {
@@ -45,20 +45,19 @@ func MachineCmd() *cobra.Command {
 
 func runMachineCmd(o *cli.MachineOptions) error {
 	var err error
-	logger.Infof("%s %s %s", o.APIKey, o.MAASURLKey, o.MAASAPIVersionKey)
 
 	// Create API server endpoint.
 	authClient, err := gomaasapi.NewAuthenticatedClient(gomaasapi.AddAPIVersionToURL(o.MAASURLKey, o.MAASAPIVersionKey), o.APIKey)
-	CheckError(err)
+	if err != nil {
+		return err
+	}
+
 	maas := gomaasapi.NewMAAS(*authClient)
-
 	maasCLI := m.NewMaasClient(maas)
-
 
 	if o.MachineID == "" {
 		fmt.Println("No machine id defined, cannot proceed.")
 	}
-
 
 	if o.MachineAction == "" {
 		fmt.Println("No action defined.")
@@ -70,23 +69,24 @@ func runMachineCmd(o *cli.MachineOptions) error {
 		if err != nil {
 			return err
 		}
-		fmt.Printf("result: %v", result)
+		return fmtPrintJson(result)
 	case "release":
 		result, err := maasCLI.ReleaseMachine(o.MachineID)
 		if err != nil {
 			return err
 		}
-		fmt.Printf("result: %v", result)
+		return fmtPrintJson(result)
 	case "deploy":
 		result, err := maasCLI.DeployMachine(o.MachineID)
 		if err != nil {
 			return err
 		}
-		fmt.Printf("result: %v", result)
+		return fmtPrintJson(result)
 	default:
 		fmt.Printf("Action %s is not supported.\n",o.MachineAction)
 	}
 
-
 	return nil
 }
+
+

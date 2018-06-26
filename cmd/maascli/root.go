@@ -10,6 +10,8 @@ import (
 	"fmt"
 	"os"
 	"github.com/spf13/viper"
+	"github.com/juju/gomaasapi"
+	"encoding/json"
 )
 
 var (
@@ -47,6 +49,7 @@ func init(){
 func addCommands() {
 	RootCmd.AddCommand(MachineCmd())
 	RootCmd.AddCommand(ListMachinesCmd())
+	RootCmd.AddCommand(VersionCmd())
 }
 
 
@@ -59,15 +62,11 @@ func Execute() {
 	}
 }
 
-
-func CheckError(err error) {
+func fmtPrintJson(o gomaasapi.JSONObject) error {
+	jp, err := json.MarshalIndent(o, "", "\t")
 	if err != nil {
-		logger.Errorf(err.Error())
+		return err
 	}
-}
-
-func CheckErrorMsg(err error, msg string) {
-	if err != nil {
-		logger.Errorf("%s, %s", msg, err.Error())
-	}
+	fmt.Printf("\n%s",jp)
+	return nil
 }
