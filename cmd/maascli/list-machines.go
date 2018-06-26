@@ -12,6 +12,9 @@ import (
 	"fmt"
 )
 
+const (
+	printFmt = "|\t %d \t|\t %s \t|\t %s \t|\t %s:%s \t|\t %s \t|\t %s \t| \n"
+)
 
 func ListMachinesCmd() *cobra.Command {
 	mo := &cli.ListMachineOptions{}
@@ -41,7 +44,6 @@ func ListMachinesCmd() *cobra.Command {
 	return listMachinesCmd
 }
 
-
 func runListMachineCmd(o *cli.ListMachineOptions) error {
 	// Create API server endpoint.
 	authClient, err := gomaasapi.NewAuthenticatedClient(gomaasapi.AddAPIVersionToURL(o.MAASURLKey, o.MAASAPIVersionKey), o.APIKey)
@@ -62,6 +64,10 @@ func runListMachineCmd(o *cli.ListMachineOptions) error {
 		return err
 	}
 
+	if len(machinesArray) == 0 {
+		return nil
+	}
+
 	if o.Detailed {
 		return printLong(machinesArray)
 	} else {
@@ -71,29 +77,84 @@ func runListMachineCmd(o *cli.ListMachineOptions) error {
 }
 
 func printShort(machinesArray []gomaasapi.JSONObject) {
-	ms := make([]m.Machine, len(machinesArray))
+	mON := make([]m.Machine, 0)
+	mOFF := make([]m.Machine, 0)
+	mUnknown := make([]m.Machine, 0)
 
-	for i, machineObj := range machinesArray {
+	for _, machineObj := range machinesArray {
 		machine, err := machineObj.GetMAASObject()
-		checkError(err)
+		logError(err)
 
 		machineName, err := machine.GetField("hostname")
-		checkErrorMsg(err, "could not get hostname")
+		logError(err)
 
 		machineSystemID, err := machine.GetField("system_id")
-		checkErrorMsg(err, "could not get system_id")
+		logError(err)
 
 		hweKernel, err := machine.GetField("hwe_kernel")
-		checkErrorMsg(err, "could not get hwe_kernel")
+		logError(err)
 
 		os, err := machine.GetField("osystem")
-		checkErrorMsg(err, "could not get osystem")
+		logError(err)
 
-		m := m.Machine{Name: machineName, SystemID: machineSystemID, Kernel: hweKernel, OS: os}
-		ms[i] = m
+		power, err := machine.GetField("power_state")
+		logError(err)
+
+		status, err := machine.GetField("status_name")
+		logError(err)
+
+
+		m := m.Machine{
+			Name: machineName,
+			SystemID: machineSystemID,
+			Kernel: hweKernel,
+			OS: os,
+			PowerState: power,
+			Status: status,
+		}
+
+		switch power {
+		case "on":
+			mON = append(mON, m)
+		case "off":
+			mOFF = append(mOFF, m)
+		default:
+			mUnknown = append(mUnknown, m)
+		}
 	}
 
-	printList(ms)
+	// print machines that are on
+
+	if len(mON) != 0 {
+		fmt.Println("--- ON ---")
+		printMachines(mON)
+	}
+
+	if len(mOFF) != 0 {
+		fmt.Println("--- OFF ---")
+		printMachines(mOFF)
+	}
+
+	if len(mUnknown) != 0 {
+		fmt.Println("--- UNKONWN ---")
+		printMachines(mUnknown)
+	}
+
+
+}
+
+func printMachines(ms []m.Machine) {
+	for i, mn := range ms {
+		fmt.Printf(
+			printFmt,
+			i,
+			mn.SystemID,
+			mn.Name,
+			mn.OS,
+			mn.Kernel,
+			mn.PowerState,
+			mn.Status,)
+	}
 }
 
 func printLong(machinesArray []gomaasapi.JSONObject) error {
@@ -109,27 +170,8 @@ func printLong(machinesArray []gomaasapi.JSONObject) error {
 	return nil
 }
 
-func checkError(err error) {
+func logError(err error){
 	if err != nil {
 		logger.Errorf(err.Error())
 	}
-}
-
-func checkErrorMsg(err error, msg string) {
-	if err != nil {
-		logger.Errorf("%s, %s", msg, err.Error())
-	}
-}
-
-
-func printList(ms []m.Machine) {
-	if len(ms) <=0 {
-
-	} else {
-		for i, machine := range ms {
-			fmt.Printf("|\t %d \t|\t %s \t|\t %s \t|\t %s-%s \t| \n", i, machine.SystemID, machine.Name, machine.OS, machine.Kernel)
-		}
-	}
-
-
 }

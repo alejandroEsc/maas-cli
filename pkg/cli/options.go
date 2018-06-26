@@ -11,8 +11,7 @@ type MAASOptions struct {
 // MachinesOptions options for the machines command
 type MachineOptions struct {
 	MAASOptions
-	MachineID string
-	MachineAction string
+	Params string
 }
 
 // ListMachineOptions options listing machines
