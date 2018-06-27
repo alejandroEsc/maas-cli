@@ -22,20 +22,6 @@ func NewMaas(m *gomaasapi.MAASObject) *Maas {
 	return &Maas{m}
 }
 
-// GetMachines returns a gomassapi json object from a client request
-func (m *Maas) GetMachines() (gomaasapi.JSONObject, error) {
-	logger.Infof("Fetch list of machines...")
-	machineListing := m.massAPIObj.GetSubObject("machines")
-	return machineListing.CallGet("", url.Values{})
-}
-
-// GetNodes get a list of nodes.
-func (m *Maas) GetNodes() (gomaasapi.JSONObject, error) {
-	logger.Infof("Fetch list of nodes...")
-	machineListing := m.massAPIObj.GetSubObject("nodes")
-	return machineListing.CallGet("", url.Values{})
-}
-
 // GetIPAddresses get list of available ip addresses
 func (m *Maas) GetIPAddresses() (gomaasapi.JSONObject, error) {
 	logger.Infof("Fetch list of ip addresses...")

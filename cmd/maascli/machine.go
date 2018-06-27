@@ -13,7 +13,7 @@ import (
 func machineCmd() *cobra.Command {
 	mo := &cli.MachineOptions{}
 	cmd := &cobra.Command{
-		Use:   "machine",
+		Use: "machine",
 		Short: "Run a few simple machine commands",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {

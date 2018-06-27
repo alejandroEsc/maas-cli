@@ -18,7 +18,6 @@ func listCmd() *cobra.Command {
 	}
 
 	fs := cmd.Flags()
-
 	bindCommonMAASFlags(&mo.MAASOptions, fs)
 
 	cmd.AddCommand(listMachinesCmd())

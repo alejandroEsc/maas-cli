@@ -9,7 +9,7 @@ import (
 
 // Machine is a convenient internal representation of a machine
 type Machine struct {
-	Name       string
+	Hostname   string
 	SystemID   string
 	Kernel     string
 	OS         string
@@ -54,6 +54,14 @@ func DefaultParams(action MachineAction) url.Values {
 		return url.Values{}
 
 	}
+}
+
+
+// GetMachines returns a gomassapi json object from a client request
+func (m *Maas) GetMachines() (gomaasapi.JSONObject, error) {
+	logger.Infof("Fetch list of machines...")
+	machineListing := m.massAPIObj.GetSubObject("machines")
+	return machineListing.CallGet("", url.Values{})
 }
 
 // PerformMachineAction performs a commission

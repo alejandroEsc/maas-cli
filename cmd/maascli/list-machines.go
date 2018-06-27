@@ -18,7 +18,7 @@ const (
 func listMachinesCmd() *cobra.Command {
 	mo := &cli.ListMachineOptions{}
 	cmd := &cobra.Command{
-		Use:   "list machines ...",
+		Use:   "machines ...",
 		Short: "list machines resources in a MAAS server",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
@@ -100,7 +100,7 @@ func printMachinesSummary(machinesArray []gomaasapi.JSONObject) {
 		logError(err)
 
 		m := m.Machine{
-			Name:       machineName,
+			Hostname:   machineName,
 			SystemID:   machineSystemID,
 			Kernel:     hweKernel,
 			OS:         os,
@@ -143,7 +143,7 @@ func printMachines(ms []m.Machine) {
 			printMachineFmt,
 			i,
 			mn.SystemID,
-			mn.Name,
+			mn.Hostname,
 			mn.OS,
 			mn.Kernel,
 			mn.PowerState,
