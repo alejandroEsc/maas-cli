@@ -163,4 +163,3 @@ func printMachinesDetailed(machinesArray []gomaasapi.JSONObject) error {
 	}
 	return nil
 }
-

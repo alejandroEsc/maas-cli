@@ -1,8 +1,9 @@
 package maas
 
 import (
-	"github.com/juju/gomaasapi"
 	"net/url"
+
+	"github.com/juju/gomaasapi"
 )
 
 // GetNodes get a list of nodes.

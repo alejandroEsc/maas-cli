@@ -56,7 +56,6 @@ func DefaultParams(action MachineAction) url.Values {
 	}
 }
 
-
 // GetMachines returns a gomassapi json object from a client request
 func (m *Maas) GetMachines() (gomaasapi.JSONObject, error) {
 	logger.Infof("Fetch list of machines...")

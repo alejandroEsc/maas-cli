@@ -6,8 +6,9 @@ import (
 
 	"os"
 
-	"github.com/alejandroEsc/maas-cli/pkg/cli"
 	"fmt"
+
+	"github.com/alejandroEsc/maas-cli/pkg/cli"
 )
 
 func machineReleaseCmd() *cobra.Command {

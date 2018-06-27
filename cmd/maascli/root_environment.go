@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/alejandroEsc/maas-cli/pkg/cli"
-	"github.com/spf13/viper"
 	flag "github.com/spf13/pflag"
+	"github.com/spf13/viper"
 )
 
 const (

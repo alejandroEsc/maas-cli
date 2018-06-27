@@ -90,7 +90,6 @@ func printNodesSummary(nodeArray []gomaasapi.JSONObject) {
 
 }
 
-
 func printNodesDetailed(nodesArray []gomaasapi.JSONObject) error {
 	for i, nodeObj := range nodesArray {
 		node, err := nodeObj.GetMAASObject()
@@ -103,4 +102,3 @@ func printNodesDetailed(nodesArray []gomaasapi.JSONObject) error {
 	}
 	return nil
 }
-
