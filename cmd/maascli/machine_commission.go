@@ -1,12 +1,11 @@
 package main
 
 import (
-	m "github.com/alejandroEsc/maas-cli/pkg/maas"
-	"github.com/spf13/cobra"
-
+	"fmt"
 	"os"
 
-	"fmt"
+	m "github.com/alejandroEsc/maas-cli/pkg/maas"
+	"github.com/spf13/cobra"
 
 	"github.com/alejandroEsc/maas-cli/pkg/cli"
 )

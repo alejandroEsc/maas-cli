@@ -4,9 +4,8 @@ import (
 	m "github.com/alejandroEsc/maas-cli/pkg/maas"
 	"github.com/spf13/cobra"
 
-	"os"
-
 	"fmt"
+	"os"
 
 	"github.com/alejandroEsc/maas-cli/pkg/cli"
 )
