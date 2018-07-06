@@ -9,10 +9,7 @@ import (
 
 	"github.com/alejandroEsc/maas-cli/pkg/cli"
 	"github.com/juju/gomaasapi"
-)
-
-const (
-	printNodeFmt = "|\t %d \t|\t %s \t|\t %s \t|\t %s \t|\t %s-%s \t|\n"
+	"encoding/json"
 )
 
 func listNodesCmd() *cobra.Command {
@@ -70,24 +67,34 @@ func runListNodeCmd(o *cli.ListNodeOptions) error {
 }
 
 func printNodesSummary(nodeArray []gomaasapi.JSONObject) {
+	node_array := make([]m.Node, 0)
 
-	for i, nodeObj := range nodeArray {
+	for _, nodeObj := range nodeArray {
+		var n m.Node
 		node, err := nodeObj.GetMAASObject()
 		logError(err)
 
-		name, err := node.GetField("hostname")
+		j, err := node.MarshalJSON()
 		logError(err)
 
-		systemID, err := node.GetField("system_id")
+		err = json.Unmarshal(j, &n)
 		logError(err)
 
-		hweKernel, _ := node.GetField("hwe_kernel")
-		os, _ := node.GetField("osystem")
-		ips, _ := node.GetField("ip_addresses")
-
-		fmt.Printf(printNodeFmt, i, systemID, name, ips, os, hweKernel)
+		node_array = append(node_array, n)
 	}
 
+	printNodes(node_array)
+}
+
+func printNodes(ns []m.Node) {
+	for i, mn := range ns {
+		j, err := json.Marshal(mn)
+		logError(err)
+		jp, err := json.MarshalIndent(j, "", "\t")
+		logError(err)
+
+		fmt.Printf("%d \t %s",i, jp)
+	}
 }
 
 func printNodesDetailed(nodesArray []gomaasapi.JSONObject) error {

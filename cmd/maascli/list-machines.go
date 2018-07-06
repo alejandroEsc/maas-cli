@@ -9,10 +9,7 @@ import (
 
 	"github.com/alejandroEsc/maas-cli/pkg/cli"
 	"github.com/juju/gomaasapi"
-)
-
-const (
-	printMachineFmt = "|\t %d \t|\t %s \t|\t %s \t|\t %s:%s \t|\t %s \t|\t %s \t| \n"
+	"encoding/json"
 )
 
 func listMachinesCmd() *cobra.Command {
@@ -78,37 +75,17 @@ func printMachinesSummary(machinesArray []gomaasapi.JSONObject) {
 	mUnknown := make([]m.Machine, 0)
 
 	for _, machineObj := range machinesArray {
+		var m m.Machine
 		machine, err := machineObj.GetMAASObject()
 		logError(err)
 
-		machineName, err := machine.GetField("hostname")
+		j, err := machine.MarshalJSON()
 		logError(err)
 
-		machineSystemID, err := machine.GetField("system_id")
+		err = json.Unmarshal(j, &m)
 		logError(err)
 
-		hweKernel, err := machine.GetField("hwe_kernel")
-		logError(err)
-
-		os, err := machine.GetField("osystem")
-		logError(err)
-
-		power, err := machine.GetField("power_state")
-		logError(err)
-
-		status, err := machine.GetField("status_name")
-		logError(err)
-
-		m := m.Machine{
-			Hostname:   machineName,
-			SystemID:   machineSystemID,
-			Kernel:     hweKernel,
-			OS:         os,
-			PowerState: power,
-			Status:     status,
-		}
-
-		switch power {
+		switch m.PowerState {
 		case "on":
 			mON = append(mON, m)
 		case "off":
@@ -139,15 +116,12 @@ func printMachinesSummary(machinesArray []gomaasapi.JSONObject) {
 
 func printMachines(ms []m.Machine) {
 	for i, mn := range ms {
-		fmt.Printf(
-			printMachineFmt,
-			i,
-			mn.SystemID,
-			mn.Hostname,
-			mn.OS,
-			mn.Kernel,
-			mn.PowerState,
-			mn.Status)
+		j, err := json.Marshal(mn)
+		logError(err)
+		jp, err := json.MarshalIndent(j, "", "\t")
+		logError(err)
+
+		fmt.Printf("%d \t %s",i, jp)
 	}
 }
 
