@@ -7,9 +7,10 @@ import (
 	"fmt"
 	"os"
 
+	"encoding/json"
+
 	"github.com/alejandroEsc/maas-cli/pkg/cli"
 	"github.com/juju/gomaasapi"
-	"encoding/json"
 )
 
 func listNodesCmd() *cobra.Command {
@@ -67,7 +68,7 @@ func runListNodeCmd(o *cli.ListNodeOptions) error {
 }
 
 func printNodesSummary(nodeArray []gomaasapi.JSONObject) {
-	node_array := make([]m.Node, 0)
+	nodeSlice := make([]m.Node, 0)
 
 	for _, nodeObj := range nodeArray {
 		var n m.Node
@@ -80,10 +81,10 @@ func printNodesSummary(nodeArray []gomaasapi.JSONObject) {
 		err = json.Unmarshal(j, &n)
 		logError(err)
 
-		node_array = append(node_array, n)
+		nodeSlice = append(nodeSlice, n)
 	}
 
-	printNodes(node_array)
+	printNodes(nodeSlice)
 }
 
 func printNodes(ns []m.Node) {
@@ -93,7 +94,7 @@ func printNodes(ns []m.Node) {
 		jp, err := json.MarshalIndent(j, "", "\t")
 		logError(err)
 
-		fmt.Printf("%d \t %s",i, jp)
+		fmt.Printf("%d \t %s", i, jp)
 	}
 }
 

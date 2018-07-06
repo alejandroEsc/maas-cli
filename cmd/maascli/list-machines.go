@@ -7,9 +7,10 @@ import (
 	"fmt"
 	"os"
 
+	"encoding/json"
+
 	"github.com/alejandroEsc/maas-cli/pkg/cli"
 	"github.com/juju/gomaasapi"
-	"encoding/json"
 )
 
 func listMachinesCmd() *cobra.Command {
@@ -121,7 +122,7 @@ func printMachines(ms []m.Machine) {
 		jp, err := json.MarshalIndent(j, "", "\t")
 		logError(err)
 
-		fmt.Printf("%d \t %s",i, jp)
+		fmt.Printf("%d \t %s", i, jp)
 	}
 }
 

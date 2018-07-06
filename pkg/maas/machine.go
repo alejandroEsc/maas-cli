@@ -9,14 +9,14 @@ import (
 
 // Machine is a convenient internal representation of a machine
 type Machine struct {
-	Hostname   string `json:"hostname,omitempty"`
-	SystemID   string `json:"system_id,omitempty"`
-	Kernel     string `json:"hwe_kernel,omitempty"`
-	OS         string `json:"osystem,omitempty"`
-	PowerState string `json:"power_state,omitempty"`
-	Status     string `json:"status_name,omitempty"`
+	Hostname    string   `json:"hostname,omitempty"`
+	SystemID    string   `json:"system_id,omitempty"`
+	Kernel      string   `json:"hwe_kernel,omitempty"`
+	OS          string   `json:"osystem,omitempty"`
+	PowerState  string   `json:"power_state,omitempty"`
+	Status      string   `json:"status_name,omitempty"`
 	IPAddresses []string `json:"ip_addresses,omitempty"`
-	MACAddress string `json:"mac_address,omitempty"`
+	MACAddress  string   `json:"mac_address,omitempty"`
 }
 
 // MachineAction represents actions that can be taken against a machine
