@@ -11,6 +11,7 @@ import (
 
 	"github.com/alejandroEsc/maas-cli/pkg/cli"
 	"github.com/juju/gomaasapi"
+	"sort"
 )
 
 func listNodesCmd() *cobra.Command {
@@ -83,6 +84,10 @@ func printNodesSummary(nodeArray []gomaasapi.JSONObject) {
 
 		nodeSlice = append(nodeSlice, n)
 	}
+
+	sort.Slice(nodeSlice, func(i, j int) bool {
+		return nodeSlice[i].Status < nodeSlice[j].Status
+	})
 
 	printNodes(nodeSlice)
 }
