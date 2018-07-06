@@ -11,6 +11,7 @@ import (
 
 	"github.com/alejandroEsc/maas-cli/pkg/cli"
 	"github.com/juju/gomaasapi"
+	"sort"
 )
 
 func listMachinesCmd() *cobra.Command {
@@ -71,9 +72,7 @@ func runListMachineCmd(o *cli.ListMachineOptions) error {
 }
 
 func printMachinesSummary(machinesArray []gomaasapi.JSONObject) {
-	mON := make([]m.Machine, 0)
-	mOFF := make([]m.Machine, 0)
-	mUnknown := make([]m.Machine, 0)
+	machineSlice := make([]m.Machine, 0)
 
 	for _, machineObj := range machinesArray {
 		var m m.Machine
@@ -86,33 +85,13 @@ func printMachinesSummary(machinesArray []gomaasapi.JSONObject) {
 		err = json.Unmarshal(j, &m)
 		logError(err)
 
-		switch m.PowerState {
-		case "on":
-			mON = append(mON, m)
-		case "off":
-			mOFF = append(mOFF, m)
-		default:
-			mUnknown = append(mUnknown, m)
-		}
 	}
 
-	// print machines that are on
+	sort.Slice(machineSlice, func(i, j int) bool {
+		return machineSlice[i].PowerState < machineSlice[j].PowerState
+	})
 
-	if len(mON) != 0 {
-		fmt.Println("--- ON ---")
-		printMachines(mON)
-	}
-
-	if len(mOFF) != 0 {
-		fmt.Println("--- OFF ---")
-		printMachines(mOFF)
-	}
-
-	if len(mUnknown) != 0 {
-		fmt.Println("--- UNKONWN ---")
-		printMachines(mUnknown)
-	}
-
+	printMachines(machineSlice)
 }
 
 func printMachines(ms []m.Machine) {
