@@ -16,9 +16,9 @@ import (
 )
 
 var (
-	loglevel = loggo.INFO
-	logger  = util.GetModuleLogger("cmd.maascli", loggo.INFO)
-	options = &cli.MAASOptions{}
+	logLevel = "UNSPECIFIED"
+	logger   = util.GetModuleLogger("cmd.maascli", loggo.UNSPECIFIED)
+	options  = &cli.MAASOptions{}
 )
 
 // RootCmd represents the base command when called without any subcommands
@@ -26,6 +26,11 @@ var RootCmd = &cobra.Command{
 	Use:   "maas-cli",
 	Short: "MAAS CLI tool",
 	Run: func(cmd *cobra.Command, args []string) {
+		level, isValid := loggo.ParseLevel(logLevel)
+		if isValid {
+			logger.SetLogLevel(level)
+		}
+
 		cmd.Help()
 	},
 }
@@ -38,6 +43,7 @@ func init() {
 	RootCmd.PersistentFlags().StringVar(&options.APIKey, "api-key", viper.GetString(keyAPIKey), "maas apikey")
 	RootCmd.PersistentFlags().StringVar(&options.MAASURLKey, "maas-url", viper.GetString(keyMAASURL), "maas url")
 	RootCmd.PersistentFlags().StringVar(&options.MAASAPIVersionKey, "api-version", viper.GetString(keyMAASAPIVersion), "maas api version")
+	RootCmd.PersistentFlags().StringVarP(&logLevel, "verbose", "v", "UNSPECIFIED", "log level")
 
 	// bind environment vars
 	bindEnvVars()

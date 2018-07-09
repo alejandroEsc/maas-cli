@@ -60,14 +60,12 @@ func DefaultParams(action MachineAction) url.Values {
 
 // GetMachines returns a gomassapi json object from a client request
 func (m *Maas) GetMachines() (gomaasapi.JSONObject, error) {
-	logger.Infof("Fetch list of machines...")
 	machineListing := m.massAPIObj.GetSubObject("machines")
 	return machineListing.CallGet("", url.Values{})
 }
 
 // PerformMachineAction performs a commission
 func (m *Maas) PerformMachineAction(action MachineAction, systemID string, params url.Values) (gomaasapi.JSONObject, error) {
-	logger.Infof("%s Machine %s...", action, systemID)
 	machineSubObject := m.massAPIObj.GetSubObject("machines").GetSubObject(systemID)
 	if params == nil {
 		params = DefaultParams(action)
@@ -93,12 +91,12 @@ func (m *Maas) GetStatus(systemID string) (string, error) {
 	// we dont care about individual error states here.
 	power, err := machine.GetField("power_state")
 	if err != nil {
-		logger.Errorf(err.Error())
+		return "", err
 	}
 
 	status, err := machine.GetField("status_name")
 	if err != nil {
-		logger.Errorf(err.Error())
+		return "", err
 	}
 
 	return fmt.Sprintf("\t %s \t %s \t %s \t", systemID, power, status), nil
