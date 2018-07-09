@@ -86,7 +86,7 @@ func printMachinesSummary(machinesArray []gomaasapi.JSONObject) {
 		err = json.Unmarshal(j, &m)
 		logError(err)
 
-		fmt.Printf(printMachineFmt,i,
+		fmt.Printf(printMachineFmt, i,
 			m.SystemID,
 			m.Hostname,
 			m.OS,

@@ -9,14 +9,16 @@ import (
 
 	"encoding/json"
 
+	"sort"
+
 	"github.com/alejandroEsc/maas-cli/pkg/cli"
 	"github.com/juju/gomaasapi"
-	"sort"
 )
 
-const(
+const (
 	printNodeFmt = "\t %d \t %s \t %s \t %s \t %s \t %s \t\n"
 )
+
 func listNodesCmd() *cobra.Command {
 	no := &cli.ListNodeOptions{}
 	cmd := &cobra.Command{
@@ -96,7 +98,6 @@ func printNodesSummary(nodeArray []gomaasapi.JSONObject) {
 		fmt.Printf(printNodeFmt, i, n.SystemID, n.Hostname, n.IPAddresses, n.OS, n.Kernel)
 	}
 }
-
 
 func printNodesDetailed(nodesArray []gomaasapi.JSONObject) error {
 	for i, nodeObj := range nodesArray {

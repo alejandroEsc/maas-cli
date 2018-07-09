@@ -6,7 +6,6 @@ import (
 	"github.com/juju/gomaasapi"
 )
 
-
 // Maas encapsulates calls to Maas via library calls
 type Maas struct {
 	massAPIObj *gomaasapi.MAASObject
