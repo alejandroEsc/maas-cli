@@ -49,18 +49,17 @@ List machines available
 ```
 $ ./bin/maas-cli list-machines
 2018-06-26 18:32:57 INFO pkg.maas maas_client.go:27 Fetch list of machines...
---- ON ---
-|	 0 	|	 fpfnhk 	|	 nuc2-1 	|	 ubuntu:ga-16.04 	|	 on 	|	 Deployed 	|
-|	 1 	|	 t67tnf 	|	 nuc2-2 	|	 ubuntu:ga-16.04 	|	 on 	|	 Deployed 	|
-|	 2 	|	 dddcpt 	|	 nuc2-3 	|	 ubuntu:ga-16.04 	|	 on 	|	 Deployed 	|
-|	 3 	|	 rxb4tr 	|	 nuc2-4 	|	 ubuntu:ga-16.04 	|	 on 	|	 Deployed 	|
+	 0 		 fpfnhk 	nuc2-1 	ubuntu     ga-16.04 	 on 	 Deployed 	
+	 1 		 t67tnf 	nuc2-2 	ubuntu     ga-16.04 	 on 	 Deployed 	
+	 2 		 dddcpt 	nuc2-3 	ubuntu     ga-16.04 	 on 	 Deployed 	
+	 3 		 rxb4tr 	nuc2-4 	ubuntu     ga-16.04 	 on 	 Deployed 	
 ```
 
 Get individual status
 ```
 $ ./bin/maas-cli machine status fpfnhk t67tnf
-|	 fpfnhk 	|	 on 	|	 Deployed 	|
-|	 t67tnf 	|	 on 	|	 Deployed 	|
+	 fpfnhk 	on      Deployed 	
+	 t67tnf 	on      Deployed 	
 ```
 
 ## MAAS Client

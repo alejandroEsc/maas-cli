@@ -16,6 +16,7 @@ import (
 )
 
 var (
+	loglevel = loggo.INFO
 	logger  = util.GetModuleLogger("cmd.maascli", loggo.INFO)
 	options = &cli.MAASOptions{}
 )

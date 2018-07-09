@@ -11,7 +11,10 @@ import (
 
 	"github.com/alejandroEsc/maas-cli/pkg/cli"
 	"github.com/juju/gomaasapi"
-	"sort"
+)
+
+const (
+	printMachineFmt = "\t %d \t %s \t %s \t %s \t %s \t %s \t %s \t\n"
 )
 
 func listMachinesCmd() *cobra.Command {
@@ -45,7 +48,6 @@ func runListMachineCmd(o *cli.ListMachineOptions) error {
 		return err
 	}
 	maas := gomaasapi.NewMAAS(*authClient)
-
 	maasCLI := m.NewMaas(maas)
 
 	listObj, err := maasCLI.GetMachines()
@@ -72,9 +74,8 @@ func runListMachineCmd(o *cli.ListMachineOptions) error {
 }
 
 func printMachinesSummary(machinesArray []gomaasapi.JSONObject) {
-	machineSlice := make([]m.Machine, 0)
 
-	for _, machineObj := range machinesArray {
+	for i, machineObj := range machinesArray {
 		var m m.Machine
 		machine, err := machineObj.GetMAASObject()
 		logError(err)
@@ -85,24 +86,16 @@ func printMachinesSummary(machinesArray []gomaasapi.JSONObject) {
 		err = json.Unmarshal(j, &m)
 		logError(err)
 
+		fmt.Printf(printMachineFmt,i,
+			m.SystemID,
+			m.Hostname,
+			m.OS,
+			m.Kernel,
+			m.PowerState,
+			m.Status,
+		)
 	}
 
-	sort.Slice(machineSlice, func(i, j int) bool {
-		return machineSlice[i].PowerState < machineSlice[j].PowerState
-	})
-
-	printMachines(machineSlice)
-}
-
-func printMachines(ms []m.Machine) {
-	for i, mn := range ms {
-		j, err := json.Marshal(mn)
-		logError(err)
-		jp, err := json.MarshalIndent(j, "", "\t")
-		logError(err)
-
-		fmt.Printf("%d \t %s", i, jp)
-	}
 }
 
 func printMachinesDetailed(machinesArray []gomaasapi.JSONObject) error {

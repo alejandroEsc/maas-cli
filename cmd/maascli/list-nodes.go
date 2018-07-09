@@ -14,6 +14,9 @@ import (
 	"sort"
 )
 
+const(
+	printNodeFmt = "\t %d \t %s \t %s \t %s \t %s \t %s \t\n"
+)
 func listNodesCmd() *cobra.Command {
 	no := &cli.ListNodeOptions{}
 	cmd := &cobra.Command{
@@ -89,19 +92,11 @@ func printNodesSummary(nodeArray []gomaasapi.JSONObject) {
 		return nodeSlice[i].Status < nodeSlice[j].Status
 	})
 
-	printNodes(nodeSlice)
-}
-
-func printNodes(ns []m.Node) {
-	for i, mn := range ns {
-		j, err := json.Marshal(mn)
-		logError(err)
-		jp, err := json.MarshalIndent(j, "", "\t")
-		logError(err)
-
-		fmt.Printf("%d \t %s", i, jp)
+	for i, n := range nodeSlice {
+		fmt.Printf(printNodeFmt, i, n.SystemID, n.Hostname, n.IPAddresses, n.OS, n.Kernel)
 	}
 }
+
 
 func printNodesDetailed(nodesArray []gomaasapi.JSONObject) error {
 	for i, nodeObj := range nodesArray {
