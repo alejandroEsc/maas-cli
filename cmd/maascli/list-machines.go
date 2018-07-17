@@ -1,7 +1,8 @@
 package main
 
 import (
-	m "github.com/alejandroEsc/maas-cli/pkg/maas"
+	"github.com/alejandroEsc/golang-maas-client/pkg/api"
+	"github.com/alejandroEsc/golang-maas-client/pkg/api/v2"
 	"github.com/spf13/cobra"
 
 	"fmt"
@@ -10,7 +11,6 @@ import (
 	"encoding/json"
 
 	"github.com/alejandroEsc/maas-cli/pkg/cli"
-	"github.com/juju/gomaasapi"
 )
 
 const (
@@ -42,71 +42,51 @@ func listMachinesCmd() *cobra.Command {
 }
 
 func runListMachineCmd(o *cli.ListMachineOptions) error {
-	// Create API server endpoint.
-	authClient, err := gomaasapi.NewAuthenticatedClient(gomaasapi.AddAPIVersionToURL(o.MAASURLKey, o.MAASAPIVersionKey), o.APIKey)
-	if err != nil {
-		return err
-	}
-	maas := gomaasapi.NewMAAS(*authClient)
-	maasCLI := m.NewMaas(maas)
 
-	listObj, err := maasCLI.GetMachines()
+	maas, err := api.NewMASS(o.MAASURLKey, o.MAASAPIVersionKey, o.APIKey)
 	if err != nil {
 		return err
 	}
 
-	machinesArray, err := listObj.GetArray()
+	params := v2.MachinesParams(v2.MachinesArgs{})
+	rawMachines, err := maas.Get("machines", "", params.Values)
+
+	var machines []v2.Machine
+	err = json.Unmarshal(rawMachines, &machines)
 	if err != nil {
 		return err
 	}
 
-	if len(machinesArray) == 0 {
+	if len(machines) == 0 {
 		return nil
 	}
 
 	if o.Detailed {
-		return printMachinesDetailed(machinesArray)
+		return printMachinesDetailed(machines)
 	}
 
-	printMachinesSummary(machinesArray)
+	printMachinesSummary(machines)
 
 	return nil
 }
 
-func printMachinesSummary(machinesArray []gomaasapi.JSONObject) {
-
-	for i, machineObj := range machinesArray {
-		var m m.Machine
-		machine, err := machineObj.GetMAASObject()
-		logError(err)
-
-		j, err := machine.MarshalJSON()
-		logError(err)
-
-		err = json.Unmarshal(j, &m)
-		logError(err)
-
+func printMachinesSummary(machinesArray []v2.Machine) {
+	for i, m := range machinesArray {
 		fmt.Printf(printMachineFmt, i,
 			m.SystemID,
 			m.Hostname,
-			m.OS,
+			m.OperatingSystem,
 			m.Kernel,
 			m.PowerState,
-			m.Status,
+			m.StatusName,
 		)
 	}
-
 }
 
-func printMachinesDetailed(machinesArray []gomaasapi.JSONObject) error {
-	for i, machineObj := range machinesArray {
-		machine, err := machineObj.GetMAASObject()
-		j, err := machine.MarshalJSON()
-		if err != nil {
-			return err
-		}
+func printMachinesDetailed(machinesArray []v2.Machine) error {
+	for i, m := range machinesArray {
 		fmt.Printf("\n --- machine: %d ---\n", i)
-		fmt.Printf("%s", j)
+		fmt.Printf("%+v\n", m)
 	}
 	return nil
 }

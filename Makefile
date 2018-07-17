@@ -1,24 +1,25 @@
 GIT_SHA=$(shell git rev-parse --verify HEAD)
 GOBUILD_CLI=go build -o ./bin/maas-cli
-GOBUILD_CLIENT=go build -o ./bin/mass-sample-client
 
 clean: ## clean build output
 	rm -rf bin/*
 
 compile: ## build and place in local bin directory
 	${GOBUILD_CLI} ./cmd/maascli
-	${GOBUILD_CLIENT} ./cmd/client
 
 compile-linux: ## build linux version
 	GOOS=linux GOARCH=amd64 ${GOBUILD_CLI} -o bin/linux-amd64 ./cmd/maascli
-	GOOS=linux GOARCH=amd64 ${GOBUILD_CLIENT} -o bin/linux-amd64 ./cmd/client
 
 go-lint-checks: ## run linting checks against golang code
 	./scripts/verify.sh
 
 go-clean: ## have gofmt and goimports clean up go code
-	./scripts/clean/gofmt-clean.sh
-	./scripts/clean/goimports-clean.sh
+	gofmt -w -s ./pkg
+	gofmt -w -s ./pkg/cli/
+	gofmt -w -s ./pkg/util/
+	gofmt -w -s ./cmd
+	gofmt -w -s ./cmd/maascli/
+	goimports -w $(shell git ls-files "**/*.go" "*.go" | grep -v -e "vendor" | xargs echo)
 
 .PHONY: install-tools
 install-tools: ## install tools needed by go-link-checks

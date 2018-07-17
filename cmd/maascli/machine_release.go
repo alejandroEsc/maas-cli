@@ -1,25 +1,28 @@
 package main
 
 import (
-	m "github.com/alejandroEsc/maas-cli/pkg/maas"
 	"github.com/spf13/cobra"
 
 	"os"
 
 	"fmt"
 
+	"github.com/alejandroEsc/golang-maas-client/pkg/api"
+	"github.com/alejandroEsc/golang-maas-client/pkg/api/v2"
+
 	"github.com/alejandroEsc/maas-cli/pkg/cli"
+	"encoding/json"
 )
 
 func machineReleaseCmd() *cobra.Command {
-	mo := &cli.MachineOptions{}
+	mo := &cli.ReleaseMachineOpts{}
 	cmd := &cobra.Command{
 		Use:   "release [machineID]",
 		Short: "Release action against one or more machines.",
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
 
-			if err := runMachineActionCmd(m.ReleaseMachine, mo, args); err != nil {
+			if err := runMachineReleaseCmd(mo, args); err != nil {
 				fmt.Println(err.Error())
 				os.Exit(1)
 			}
@@ -30,7 +33,41 @@ func machineReleaseCmd() *cobra.Command {
 	fs := cmd.Flags()
 	bindCommonMAASFlags(&mo.MAASOptions, fs)
 
-	fs.StringVar(&mo.Params, "params", "", "paramaters to pass to an action")
-
+	fs.StringVar(&mo.Comment, "comment", "", " Optional comment for the event log")
+	fs.BoolVar(&mo.Erase, "erase", true, " Erase the disk when releasing.")
+	fs.BoolVar(&mo.SecureErase, "secure-erase", false, " Erase the disk when releasing.")
+	fs.BoolVar(&mo.QuickErase, "quick-erase", true, " Erase the disk when releasing.")
 	return cmd
+}
+
+func runMachineReleaseCmd(o *cli.ReleaseMachineOpts, args []string) error {
+	params := v2.ReleaseMachinesParams(o.ReleaseMachinesArgs)
+	maas, err := api.NewMASS(o.MAASURLKey, o.MAASAPIVersionKey, o.APIKey)
+	if err != nil {
+		return err
+	}
+
+	for i, id := range args {
+		result, err := maas.Post("machines/"+id, string(v2.MachineRelease), params.Values)
+		if err != nil {
+			return err
+		}
+
+		var m v2.Machine
+		err = json.Unmarshal(result, &m)
+		if err != nil {
+			logger.Errorf(err.Error())
+			continue
+		}
+		fmt.Printf(printMachineFmt, i,
+			m.SystemID,
+			m.Hostname,
+			m.OperatingSystem,
+			m.Kernel,
+			m.PowerState,
+			m.StatusName,
+		)
+	}
+
+	return nil
 }

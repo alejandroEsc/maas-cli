@@ -1,14 +1,19 @@
 package main
 
 import (
-	m "github.com/alejandroEsc/maas-cli/pkg/maas"
-	"github.com/juju/gomaasapi"
 	"github.com/spf13/cobra"
 
 	"os"
 
 	"github.com/alejandroEsc/maas-cli/pkg/cli"
 	"github.com/spf13/viper"
+
+	"github.com/alejandroEsc/golang-maas-client/pkg/api"
+	"github.com/alejandroEsc/golang-maas-client/pkg/api/v2"
+
+	"net/url"
+	"encoding/json"
+	"fmt"
 )
 
 func versionCmd() *cobra.Command {
@@ -38,20 +43,24 @@ func versionCmd() *cobra.Command {
 func runVersionCmd(o *cli.VersionOptions) error {
 	var err error
 
-	// Create API server endpoint.
-	authClient, err := gomaasapi.NewAuthenticatedClient(gomaasapi.AddAPIVersionToURL(o.MAASURLKey, o.MAASAPIVersionKey), o.APIKey)
+	maas, err := api.NewMASS(o.MAASURLKey, o.MAASAPIVersionKey, o.APIKey)
 	if err != nil {
 		return err
 	}
-	maas := gomaasapi.NewMAAS(*authClient)
 
-	maasCLI := m.NewMaas(maas)
-
-	version, err := maasCLI.GetMAASVersion()
+	versionBytes, err := maas.Get("version","",url.Values{})
 	if err != nil {
 		return err
 	}
-	fmtPrintJSON(version)
+
+	var version v2.Version
+	err = json.Unmarshal(versionBytes, &version)
+	if err != nil {
+		return err
+	}
+
+
+	fmt.Printf("Version: %s\nSubVersion %s\n", version.Version,version.SubVersion)
 
 	return nil
 }

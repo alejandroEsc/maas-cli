@@ -11,7 +11,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/juju/gomaasapi"
 	"github.com/spf13/viper"
 )
 
@@ -66,8 +65,8 @@ func Execute() {
 	}
 }
 
-func fmtPrintJSON(o gomaasapi.JSONObject) error {
-	jp, err := json.MarshalIndent(o, "", "\t")
+func fmtPrintJSON(o []byte) error {
+	jp, err := json.MarshalIndent(string(o), "", "\t")
 	if err != nil {
 		return err
 	}

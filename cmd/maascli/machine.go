@@ -1,13 +1,10 @@
 package main
 
 import (
-	m "github.com/alejandroEsc/maas-cli/pkg/maas"
+
 	"github.com/spf13/cobra"
 
-	"net/url"
-
 	"github.com/alejandroEsc/maas-cli/pkg/cli"
-	"github.com/juju/gomaasapi"
 )
 
 func machineCmd() *cobra.Command {
@@ -31,37 +28,3 @@ func machineCmd() *cobra.Command {
 	return cmd
 }
 
-func runMachineActionCmd(action m.MachineAction, o *cli.MachineOptions, args []string) error {
-	var err error
-	var params url.Values
-
-	if o.Params != "" {
-		params, err = url.ParseQuery(o.Params)
-		if err != nil {
-			return err
-		}
-	}
-
-	// Create API server endpoint.
-	authClient, err := gomaasapi.NewAuthenticatedClient(gomaasapi.AddAPIVersionToURL(o.MAASURLKey, o.MAASAPIVersionKey), o.APIKey)
-	if err != nil {
-		return err
-	}
-
-	maas := gomaasapi.NewMAAS(*authClient)
-	maasCLI := m.NewMaas(maas)
-
-	for _, id := range args {
-		result, err := maasCLI.PerformMachineAction(action, id, params)
-		if err != nil {
-			return err
-		}
-
-		err = fmtPrintJSON(result)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}

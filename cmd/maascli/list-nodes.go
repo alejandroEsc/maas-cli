@@ -1,7 +1,6 @@
 package main
 
 import (
-	m "github.com/alejandroEsc/maas-cli/pkg/maas"
 	"github.com/spf13/cobra"
 
 	"fmt"
@@ -9,14 +8,13 @@ import (
 
 	"encoding/json"
 
-	"sort"
-
+	"github.com/alejandroEsc/golang-maas-client/pkg/api"
+	"github.com/alejandroEsc/golang-maas-client/pkg/api/v2"
 	"github.com/alejandroEsc/maas-cli/pkg/cli"
-	"github.com/juju/gomaasapi"
 )
 
 const (
-	printNodeFmt = "\t %d \t %s \t %s \t %s \t %s \t %s \t\n"
+	printNodeFmt = "\t %d \t %s \t %s \t %s\n"
 )
 
 func listNodesCmd() *cobra.Command {
@@ -46,68 +44,42 @@ func listNodesCmd() *cobra.Command {
 
 func runListNodeCmd(o *cli.ListNodeOptions) error {
 	// Create API server endpoint.
-	authClient, err := gomaasapi.NewAuthenticatedClient(gomaasapi.AddAPIVersionToURL(o.MAASURLKey, o.MAASAPIVersionKey), o.APIKey)
+	maas, err := api.NewMASS(o.MAASURLKey, o.MAASAPIVersionKey, o.APIKey)
 	if err != nil {
 		return err
 	}
 
-	maas := gomaasapi.NewMAAS(*authClient)
-	maasCLI := m.NewMaas(maas)
+	params := v2.NodesParams(v2.NodesArgs{})
 
-	listObj, err := maasCLI.GetNodes()
-	if err != nil {
-		return err
-	}
+	rawNodes, err := maas.Get("nodes", "", params.Values)
 
-	nodesArray, err := listObj.GetArray()
+	var nodes []v2.Node
+	err = json.Unmarshal(rawNodes, &nodes)
 	if err != nil {
 		return err
 	}
 
 	if o.Detailed {
-		return printNodesDetailed(nodesArray)
+		return printNodesDetailed(nodes)
 	}
 
-	printNodesSummary(nodesArray)
+	printNodesSummary(nodes)
 
 	return nil
 }
 
-func printNodesSummary(nodeArray []gomaasapi.JSONObject) {
-	nodeSlice := make([]m.Node, 0)
+func printNodesSummary(nodes []v2.Node) {
+	for i, n := range nodes {
+		fmt.Printf(printNodeFmt, i, n.SystemID, n.Hostname, n.IPAddresses)
 
-	for _, nodeObj := range nodeArray {
-		var n m.Node
-		node, err := nodeObj.GetMAASObject()
-		logError(err)
-
-		j, err := node.MarshalJSON()
-		logError(err)
-
-		err = json.Unmarshal(j, &n)
-		logError(err)
-
-		nodeSlice = append(nodeSlice, n)
-	}
-
-	sort.Slice(nodeSlice, func(i, j int) bool {
-		return nodeSlice[i].Status < nodeSlice[j].Status
-	})
-
-	for i, n := range nodeSlice {
-		fmt.Printf(printNodeFmt, i, n.SystemID, n.Hostname, n.IPAddresses, n.OS, n.Kernel)
 	}
 }
 
-func printNodesDetailed(nodesArray []gomaasapi.JSONObject) error {
-	for i, nodeObj := range nodesArray {
-		node, err := nodeObj.GetMAASObject()
-		j, err := node.MarshalJSON()
-		if err != nil {
-			return err
-		}
+func printNodesDetailed(nodes []v2.Node) error {
+	for i, n := range nodes {
 		fmt.Printf("\n --- node: %d ---\n", i)
-		fmt.Printf("%s", j)
+		fmt.Printf("%+v\n", n)
+
 	}
 	return nil
 }
