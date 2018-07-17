@@ -34,10 +34,10 @@ func machineReleaseCmd() *cobra.Command {
 	fs := cmd.Flags()
 	bindCommonMAASFlags(&mo.MAASOptions, fs)
 
-	fs.StringVar(&mo.Comment, "comment", "", " Optional comment for the event log")
-	fs.BoolVar(&mo.Erase, "erase", true, " Erase the disk when releasing.")
-	fs.BoolVar(&mo.SecureErase, "secure-erase", false, " Erase the disk when releasing.")
-	fs.BoolVar(&mo.QuickErase, "quick-erase", true, " Erase the disk when releasing.")
+	fs.StringVar(&mo.Comment, "comment", "", "Optional comment for the event log")
+	fs.BoolVar(&mo.Erase, "erase", true, "Erase the disk when releasing")
+	fs.BoolVar(&mo.SecureErase, "secure-erase", false, "Erase the disk when releasing")
+	fs.BoolVar(&mo.QuickErase, "quick-erase", true, "Erase the disk when releasing")
 	return cmd
 }
 

@@ -27,10 +27,6 @@
 
 [[constraint]]
   branch = "master"
-  name = "github.com/juju/gomaasapi"
-
-[[constraint]]
-  branch = "master"
   name = "github.com/juju/loggo"
 
 [[constraint]]
@@ -41,10 +37,11 @@
   name = "github.com/spf13/cobra"
   version = "0.0.3"
 
+[[constraint]]
+  branch = "master"
+  name = "github.com/alejandroEsc/golang-maas-client"
+
 [prune]
   go-tests = true
   unused-packages = true
 
-[[constraint]]
-  branch = "master"
-  name = "github.com/alejandroEsc/golang-maas-client"

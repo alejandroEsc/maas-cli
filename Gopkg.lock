@@ -2,6 +2,23 @@
 
 
 [[projects]]
+  branch = "master"
+  name = "github.com/alejandroEsc/golang-maas-client"
+  packages = [
+    "pkg/api",
+    "pkg/api/client",
+    "pkg/api/util",
+    "pkg/api/v2"
+  ]
+  revision = "28756f2bb39b51596f7628fcd3965a53e67fbdef"
+
+[[projects]]
+  name = "github.com/davecgh/go-spew"
+  packages = ["spew"]
+  revision = "346938d642f2ec3594ed81d874461961cd0faa76"
+  version = "v1.1.0"
+
+[[projects]]
   name = "github.com/fsnotify/fsnotify"
   packages = ["."]
   revision = "c2828203cd70a50dcccfb2761f8b1f8ceef9a8e9"
@@ -38,12 +55,6 @@
 
 [[projects]]
   branch = "master"
-  name = "github.com/juju/gomaasapi"
-  packages = ["."]
-  revision = "663f786f595ba1707f56f62f7f4f2284c47c0f1d"
-
-[[projects]]
-  branch = "master"
   name = "github.com/juju/loggo"
   packages = ["."]
   revision = "7f1609ff1f3fcf3519ed62ccaaa9e609ea287838"
@@ -71,6 +82,12 @@
   revision = "b64dbd566305c836274f0268fa59183a52906b36"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/lxc/lxd"
+  packages = ["shared/logger"]
+  revision = "ca6dd267a814f298b092dd8af60da32329d6694f"
+
+[[projects]]
   name = "github.com/magiconair/properties"
   packages = ["."]
   revision = "c3beff4c2358b44d0493c7dda585e7db7ff28ae6"
@@ -87,6 +104,12 @@
   packages = ["."]
   revision = "acdc4509485b587f5e675510c4f2c63e90ff68a8"
   version = "v1.1.0"
+
+[[projects]]
+  name = "github.com/pmezard/go-difflib"
+  packages = ["difflib"]
+  revision = "792786c7400a136282c1664665ae0a8db921c6c2"
+  version = "v1.0.0"
 
 [[projects]]
   name = "github.com/spf13/afero"
@@ -126,6 +149,12 @@
   packages = ["."]
   revision = "b5e8006cbee93ec955a89ab31e0e3ce3204f3736"
   version = "v1.0.2"
+
+[[projects]]
+  name = "github.com/stretchr/testify"
+  packages = ["assert"]
+  revision = "f35b8ab0b5a2cef36673838d662e249dd9c94686"
+  version = "v1.2.2"
 
 [[projects]]
   branch = "master"
@@ -182,6 +211,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "f1c8e9f318cdf0bf02a1b3b6c6458f8e0287b129c1a674c25e553d24e15a5b8e"
+  inputs-digest = "55de0179217708f106e4752dddab6202f6da5bd18ebd70e8739da0af3f35a435"
   solver-name = "gps-cdcl"
   solver-version = 1

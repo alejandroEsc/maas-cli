@@ -1,10 +1,10 @@
 # MAAS-CLI
+Client tool developed against the golang maas api library [https://github.com/alejandroEsc/golang-maas-client](https://github.com/alejandroEsc/golang-maas-client).
+That project in turn was based out of [https://github.com/juju/gomaasapi](https://github.com/juju/gomaasapi), which is strongly encouraged.
 
-One goal of this project is to get usable maas-client library code example so one
-can learn to use the api tools provided by the [https://github.com/juju/gomaasapi](https://github.com/juju/gomaasapi) project.
+The point of this project is to build a CLI tool as a means to access MAAS.
 
 ## Building
-
 First we need to build the vendor directory
 
 ```
@@ -17,11 +17,10 @@ To build the projects listed above you run
 $ make compile
 ```
 
-which should build two binaries:
+which should build the binary:
 
 ```
 ./bin/mass-cli
-./bin/maas-client
 ```
 
 The client tool being the CLI and the other an example of creating a maas client.
@@ -62,3 +61,9 @@ Sample client code that creates a client that consumes the maas api.
 
 
 ## Developing
+
+
+# References
+
+- [1] [MAAS API Documenttion](https://docs.maas.io/2.4/en/api)
+- [2] [https://github.com/juju/gomaasapi](https://github.com/juju/gomaasapi)
