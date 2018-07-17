@@ -11,9 +11,9 @@ import (
 	"github.com/alejandroEsc/golang-maas-client/pkg/api"
 	"github.com/alejandroEsc/golang-maas-client/pkg/api/v2"
 
-	"net/url"
 	"encoding/json"
 	"fmt"
+	"net/url"
 )
 
 func versionCmd() *cobra.Command {
@@ -48,7 +48,7 @@ func runVersionCmd(o *cli.VersionOptions) error {
 		return err
 	}
 
-	versionBytes, err := maas.Get("version","",url.Values{})
+	versionBytes, err := maas.Get("version", "", url.Values{})
 	if err != nil {
 		return err
 	}
@@ -59,8 +59,7 @@ func runVersionCmd(o *cli.VersionOptions) error {
 		return err
 	}
 
-
-	fmt.Printf("Version: %s\nSubVersion %s\n", version.Version,version.SubVersion)
+	fmt.Printf("Version: %s\nSubVersion %s\n", version.Version, version.SubVersion)
 
 	return nil
 }

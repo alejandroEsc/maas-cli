@@ -17,16 +17,19 @@ type MachineOptions struct {
 	Params string
 }
 
+// CommissionMachineOpts represents commission machine options
 type CommissionMachineOpts struct {
 	MAASOptions
 	v2.CommissionMachineArgs
 }
 
+// DeployMachineOpts represents deploy machine options
 type DeployMachineOpts struct {
 	MAASOptions
 	v2.DeployMachineArgs
 }
 
+// ReleaseMachineOpts represents release machine options
 type ReleaseMachineOpts struct {
 	MAASOptions
 	v2.ReleaseMachinesArgs

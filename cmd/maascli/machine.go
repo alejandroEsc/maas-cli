@@ -1,7 +1,6 @@
 package main
 
 import (
-
 	"github.com/spf13/cobra"
 
 	"github.com/alejandroEsc/maas-cli/pkg/cli"
@@ -27,4 +26,3 @@ func machineCmd() *cobra.Command {
 
 	return cmd
 }
-

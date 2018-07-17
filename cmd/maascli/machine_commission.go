@@ -8,8 +8,9 @@ import (
 	"github.com/alejandroEsc/golang-maas-client/pkg/api/v2"
 	"github.com/spf13/cobra"
 
-	"github.com/alejandroEsc/maas-cli/pkg/cli"
 	"encoding/json"
+
+	"github.com/alejandroEsc/maas-cli/pkg/cli"
 )
 
 func machineCommissionCmd() *cobra.Command {

@@ -9,8 +9,9 @@ import (
 	"github.com/alejandroEsc/golang-maas-client/pkg/api"
 	"github.com/alejandroEsc/golang-maas-client/pkg/api/v2"
 
-	"github.com/alejandroEsc/maas-cli/pkg/cli"
 	"encoding/json"
+
+	"github.com/alejandroEsc/maas-cli/pkg/cli"
 )
 
 func machineDeployCmd() *cobra.Command {
