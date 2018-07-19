@@ -13,6 +13,11 @@ compile-linux: ## build linux version
 go-lint-checks: ## run linting checks against golang code
 	./scripts/verify.sh
 
+
+go-verify: ## run scripts to verify code
+	./scripts/verify.sh
+
+
 go-clean: ## have gofmt and goimports clean up go code
 	gofmt -w -s ./pkg
 	gofmt -w -s ./pkg/cli/
