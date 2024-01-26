@@ -1,22 +1,20 @@
 package main
 
 import (
-	"github.com/spf13/cobra"
-
-	"github.com/alejandroEsc/maas-cli/pkg/cli"
-	"github.com/alejandroEsc/maas-cli/pkg/util"
-	"github.com/juju/loggo"
-
-	"encoding/json"
 	"fmt"
 	"os"
 
+	"github.com/juju/loggo"
+	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+
+	"github.com/alejandroEsc/maas-cli/pkg/cli"
+	"github.com/alejandroEsc/maas-cli/pkg/util"
 )
 
 var (
 	logLevel = "UNSPECIFIED"
-	logger   = util.GetModuleLogger("cmd.maascli", loggo.UNSPECIFIED)
+	logger   = util.GetModuleLogger("cmd.cli", loggo.UNSPECIFIED)
 	options  = &cli.MAASOptions{}
 )
 
@@ -62,20 +60,5 @@ func Execute() {
 	if err := RootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(-1)
-	}
-}
-
-func fmtPrintJSON(o []byte) error {
-	jp, err := json.MarshalIndent(string(o), "", "\t")
-	if err != nil {
-		return err
-	}
-	fmt.Printf("\n%s", jp)
-	return nil
-}
-
-func logError(err error) {
-	if err != nil {
-		logger.Errorf(err.Error())
 	}
 }

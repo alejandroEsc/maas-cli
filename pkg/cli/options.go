@@ -1,8 +1,6 @@
 package cli
 
-import (
-	"github.com/alejandroEsc/golang-maas-client/pkg/api/v2"
-)
+import "github.com/maas/gomaasclient/entity"
 
 // MAASOptions contains the options to allow communication with MAAS
 type MAASOptions struct {
@@ -20,19 +18,22 @@ type MachineOptions struct {
 // CommissionMachineOpts represents commission machine options
 type CommissionMachineOpts struct {
 	MAASOptions
-	v2.CommissionMachineArgs
+
+	entity.MachineCommissionParams
 }
 
 // DeployMachineOpts represents deploy machine options
 type DeployMachineOpts struct {
 	MAASOptions
-	v2.DeployMachineArgs
+
+	entity.MachineDeployParams
 }
 
 // ReleaseMachineOpts represents release machine options
 type ReleaseMachineOpts struct {
 	MAASOptions
-	v2.ReleaseMachinesArgs
+
+	entity.MachineReleaseParams
 }
 
 // ListOptions options listing machines
@@ -45,6 +46,8 @@ type ListOptions struct {
 type ListMachineOptions struct {
 	MAASOptions
 	Detailed bool
+
+	entity.MachineParams
 }
 
 // ListNodeOptions options listing machines

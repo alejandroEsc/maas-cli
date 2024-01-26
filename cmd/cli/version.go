@@ -1,19 +1,14 @@
 package main
 
 import (
-	"github.com/spf13/cobra"
-
+	"fmt"
 	"os"
 
 	"github.com/alejandroEsc/maas-cli/pkg/cli"
+	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/alejandroEsc/golang-maas-client/pkg/api"
-	"github.com/alejandroEsc/golang-maas-client/pkg/api/v2"
-
-	"encoding/json"
-	"fmt"
-	"net/url"
+	gomaasclient "github.com/maas/gomaasclient/client"
 )
 
 func versionCmd() *cobra.Command {
@@ -43,23 +38,17 @@ func versionCmd() *cobra.Command {
 func runVersionCmd(o *cli.VersionOptions) error {
 	var err error
 
-	maas, err := api.NewMASS(o.MAASURLKey, o.MAASAPIVersionKey, o.APIKey)
+	maas, err := gomaasclient.GetClient(o.MAASURLKey, o.APIKey, o.MAASAPIVersionKey)
 	if err != nil {
 		return err
 	}
 
-	versionBytes, err := maas.Get("version", "", url.Values{})
+	versionBytes, err := maas.MAASServer.Get("version")
 	if err != nil {
 		return err
 	}
 
-	var version v2.Version
-	err = json.Unmarshal(versionBytes, &version)
-	if err != nil {
-		return err
-	}
-
-	fmt.Printf("Version: %s\nSubVersion %s\n", version.Version, version.SubVersion)
+	fmt.Printf("%+v\n", string(versionBytes))
 
 	return nil
 }

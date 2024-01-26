@@ -5,10 +5,10 @@ clean: ## clean build output
 	rm -rf bin/*
 
 compile: ## build and place in local bin directory
-	${GOBUILD_CLI} ./cmd/maascli
+	${GOBUILD_CLI} ./cmd/cli
 
 compile-linux: ## build linux version
-	GOOS=linux GOARCH=amd64 ${GOBUILD_CLI} -o bin/linux-amd64 ./cmd/maascli
+	GOOS=linux GOARCH=amd64 ${GOBUILD_CLI} -o bin/linux-amd64 ./cmd/cli
 
 go-lint-checks: ## run linting checks against golang code
 	./scripts/verify.sh

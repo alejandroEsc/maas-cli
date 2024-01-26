@@ -1,16 +1,11 @@
 package main
 
 import (
-	"github.com/spf13/cobra"
-
+	"fmt"
 	"os"
 
-	"fmt"
-
-	"github.com/alejandroEsc/golang-maas-client/pkg/api"
-	"github.com/alejandroEsc/golang-maas-client/pkg/api/v2"
-
-	"encoding/json"
+	gomaasclient "github.com/maas/gomaasclient/client"
+	"github.com/spf13/cobra"
 
 	"github.com/alejandroEsc/maas-cli/pkg/cli"
 )
@@ -42,32 +37,19 @@ func machineReleaseCmd() *cobra.Command {
 }
 
 func runMachineReleaseCmd(o *cli.ReleaseMachineOpts, args []string) error {
-	params := v2.ReleaseMachinesParams(o.ReleaseMachinesArgs)
-	maas, err := api.NewMASS(o.MAASURLKey, o.MAASAPIVersionKey, o.APIKey)
+	maas, err := gomaasclient.GetClient(o.MAASURLKey, o.APIKey, o.MAASAPIVersionKey)
 	if err != nil {
 		return err
 	}
 
-	for i, id := range args {
-		result, err := maas.Post("machines/"+id, string(v2.MachineRelease), params.Values)
-		if err != nil {
-			return err
+	for _, id := range args {
+		result, errRelease := maas.Machine.Release(id, &o.MachineReleaseParams)
+		if errRelease != nil {
+			return errRelease
 		}
 
-		var m v2.Machine
-		err = json.Unmarshal(result, &m)
-		if err != nil {
-			logger.Errorf(err.Error())
-			continue
-		}
-		fmt.Printf(printMachineFmt, i,
-			m.SystemID,
-			m.Hostname,
-			m.OperatingSystem,
-			m.Kernel,
-			m.PowerState,
-			m.StatusName,
-		)
+		fmt.Printf("%v", result)
+
 	}
 
 	return nil

@@ -7,9 +7,9 @@ import (
 )
 
 const (
-	envVarAPIKey     = "MAAS_CLI_API_KEY"
-	envVarURL        = "MAAS_CLI_API_URL"
-	envVarAPIVersion = "MAAS_CLI_API_VERSION"
+	envVarAPIKey     = "MAAS_APIKEY"
+	envVarURL        = "MAAS_URL"
+	envVarAPIVersion = "MAAS_VERSION"
 
 	keyAPIKey         = "api_key"
 	keyMAASURL        = "url"

@@ -1,16 +1,12 @@
 package main
 
 import (
-	"github.com/spf13/cobra"
-
 	"fmt"
 	"os"
 
-	"encoding/json"
-	"net/url"
+	gomaasclient "github.com/maas/gomaasclient/client"
+	"github.com/spf13/cobra"
 
-	"github.com/alejandroEsc/golang-maas-client/pkg/api"
-	"github.com/alejandroEsc/golang-maas-client/pkg/api/v2"
 	"github.com/alejandroEsc/maas-cli/pkg/cli"
 )
 
@@ -40,24 +36,18 @@ func machineStatusCmd() *cobra.Command {
 }
 
 func runMachineStatusCmd(o *cli.MachineOptions, args []string) error {
-	var err error
-
-	maas, err := api.NewMASS(o.MAASURLKey, o.MAASAPIVersionKey, o.APIKey)
+	maas, err := gomaasclient.GetClient(o.MAASURLKey, o.APIKey, o.MAASAPIVersionKey)
 	if err != nil {
 		return err
 	}
 
 	for _, id := range args {
-		result, err := maas.Get("machines/"+id, "", url.Values{})
-
-		var machine v2.Machine
-		err = json.Unmarshal(result, &machine)
-		if err != nil {
-			logger.Errorf(err.Error())
-			continue
+		result, errRelease := maas.Machine.GetPowerState(id)
+		if errRelease != nil {
+			return errRelease
 		}
 
-		fmt.Printf("\t %s \t %s \t %s \t\n", machine.SystemID, machine.PowerState, machine.StatusName)
+		fmt.Printf("%v", result)
 	}
 
 	return nil
